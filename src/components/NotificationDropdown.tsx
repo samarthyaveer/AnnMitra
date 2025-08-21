@@ -153,7 +153,7 @@ export default function NotificationDropdown() {
                 <div className="text-4xl mb-2">🔔</div>
                 <p className="text-sm">No notifications yet</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  You'll see updates about your listings and pickups here
+                  You&apos;ll see updates about your listings and pickups here
                 </p>
               </div>
             ) : (
