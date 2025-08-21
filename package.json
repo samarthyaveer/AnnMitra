@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check-env": "node scripts/check-env.js",
+    "setup": "npm install && npm run check-env"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.31.4",

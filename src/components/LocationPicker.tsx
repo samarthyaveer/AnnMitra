@@ -4,15 +4,8 @@ import { useState, useEffect, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import { LatLngExpression } from 'leaflet'
 
-// Dynamically import the map to avoid SSR issues
-const MapComponent = dynamic(() => import('./MapComponent'), { 
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-64 bg-brand-700 rounded-lg flex items-center justify-center">
-      <div className="text-brand-300">Loading map...</div>
-    </div>
-  )
-}) as React.ComponentType<{
+// Define the MapComponent props interface
+interface MapComponentProps {
   center: LatLngExpression
   zoom?: number
   onMapClick?: (lat: number, lng: number) => void
@@ -23,7 +16,20 @@ const MapComponent = dynamic(() => import('./MapComponent'), {
     title?: string
   }>
   interactive?: boolean
-}>
+}
+
+// Dynamically import the map to avoid SSR issues
+const DynamicMapComponent = dynamic(
+  () => import('./MapComponent'),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-64 bg-brand-700 rounded-lg flex items-center justify-center">
+        <div className="text-brand-300">Loading map...</div>
+      </div>
+    )
+  }
+) as React.ComponentType<MapComponentProps>
 
 interface LocationPickerProps {
   onLocationChange: (lat: number, lng: number, address?: string) => void
@@ -231,7 +237,7 @@ export default function LocationPicker({
       {/* Map Component */}
       {showMap && position && (
         <div className="border border-gray-600 rounded-lg overflow-hidden">
-          <MapComponent
+          <DynamicMapComponent
             center={position}
             zoom={15}
             onMapClick={handleMapClick}

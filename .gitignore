@@ -39,3 +39,17 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Development and documentation files (not needed for running the project)
+PRODUCTION_READY.md
+SECURITY_AUDIT.md
+LISTINGS_ENHANCEMENT.md
+LOCATION_PICKER_FIX.md
+PHASE_5_COMPLETION.md
+
+# SQL migration files (already applied to schema)
+add-user-location-fields.sql
+create-storage-bucket.sql
+fix-all-rls-issues.sql
+fix-rls-simple.sql
+phase6-migration.sql
