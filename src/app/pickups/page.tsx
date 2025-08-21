@@ -19,6 +19,18 @@ export default function Pickups() {
   }, [isLoaded, user])
 
   useEffect(() => {
+    const fetchPickups = async () => {
+      try {
+        const response = await fetch(`/api/pickups?type=${activeTab}`)
+        const data = await response.json()
+        setPickups(data.pickups || [])
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching pickups:', error)
+        setLoading(false)
+      }
+    }
+
     if (profile) {
       fetchPickups()
     }

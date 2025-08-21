@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
-import { supabase, supabaseAdmin } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, role, email, phone, organization_name, campus_location, campus_location_lat, campus_location_lng } = body
+    const { name, role, email, phone, organization_name, campus_location, campus_location_lat, campus_location_lng, fcm_token, notifications_enabled } = body
 
     console.log('Creating user with data:', { userId, name, role, email, phone, organization_name, campus_location, campus_location_lat, campus_location_lng })
 
@@ -78,7 +79,9 @@ export async function POST(request: Request) {
         organization_name,
         campus_location,
         campus_location_lat,
-        campus_location_lng
+        campus_location_lng,
+        fcm_token,
+        notifications_enabled: notifications_enabled !== false // Default to true
       })
       .select()
       .single()
@@ -113,18 +116,28 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    const { name, phone, organization_name, campus_location, campus_location_lat, campus_location_lng } = body
+    const { name, phone, organization_name, campus_location, campus_location_lat, campus_location_lng, fcm_token, notifications_enabled } = body
+
+    const updateData: any = {
+      name,
+      phone,
+      organization_name,
+      campus_location,
+      campus_location_lat,
+      campus_location_lng
+    }
+
+    // Only update FCM token and notifications if provided
+    if (fcm_token !== undefined) {
+      updateData.fcm_token = fcm_token
+    }
+    if (notifications_enabled !== undefined) {
+      updateData.notifications_enabled = notifications_enabled
+    }
 
     const { data: user, error } = await supabase
       .from('users')
-      .update({
-        name,
-        phone,
-        organization_name,
-        campus_location,
-        campus_location_lat,
-        campus_location_lng
-      })
+      .update(updateData)
       .eq('clerk_id', userId)
       .select()
       .single()

@@ -11,6 +11,8 @@ export interface User {
   campus_location?: string
   campus_location_lat?: number
   campus_location_lng?: number
+  fcm_token?: string // For push notifications
+  notifications_enabled: boolean
   created_at: string
   updated_at: string
 }
@@ -48,6 +50,17 @@ export interface Pickup {
   notes?: string
   listing?: Listing // populated via join
   claimer?: User // populated via join
+}
+
+export interface Notification {
+  id: string
+  user_id: string
+  title: string
+  body: string
+  type: 'listing_claimed' | 'pickup_confirmed' | 'pickup_ready' | 'pickup_completed' | 'listing_expired'
+  data?: Record<string, string>
+  read: boolean
+  created_at: string
 }
 
 export interface MetricsFoodSaved {

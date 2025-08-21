@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from '@clerk/nextjs';
 import Header from '@/components/Header';
+import NotificationSetup from '@/components/NotificationSetup';
 import "./globals.css";
 
 const inter = Inter({
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
   title: "AnnMitra - Reduce Food Waste, Feed Community",
   description: "Connect surplus food from canteens with students and NGOs. Reduce waste, build community, and make a positive environmental impact.",
   keywords: "food sharing, campus, sustainability, food waste, community",
+  manifest: "/manifest.json",
 };
 
 export default function RootLayout({
@@ -23,6 +25,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <link rel="icon" href="/icon-192x192.png" />
+          <link rel="apple-touch-icon" href="/icon-192x192.png" />
+        </head>
         <body className={`${inter.variable} bg-background text-foreground antialiased`}>
           <div className="min-h-screen flex flex-col">
             <Header />
@@ -35,6 +41,7 @@ export default function RootLayout({
               </div>
             </footer>
           </div>
+          <NotificationSetup />
         </body>
       </html>
     </ClerkProvider>

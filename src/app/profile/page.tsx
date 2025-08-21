@@ -107,13 +107,13 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 sm:px-6 py-8">
       <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">
             {profile ? 'Edit Profile' : 'Complete Your Profile'}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-sm sm:text-base text-muted-foreground">
             {profile 
               ? 'Update your profile information' 
               : 'Tell us about yourself to get started with AnnMitra'
@@ -122,14 +122,14 @@ export default function ProfilePage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium mb-2">Full Name</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
+                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
                 required
               />
             </div>
@@ -140,7 +140,7 @@ export default function ProfilePage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
+                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
                 required
               />
             </div>
@@ -151,7 +151,7 @@ export default function ProfilePage() {
             <select
               value={formData.role}
               onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as 'student' | 'canteen' | 'ngo' }))}
-              className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
+              className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
               disabled={!!profile} // Can't change role after creation
             >
               <option value="student">🎓 Student</option>
@@ -165,21 +165,21 @@ export default function ProfilePage() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
             <div>
               <label className="block text-sm font-medium mb-2">Phone (Optional)</label>
               <input
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
+                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
               />
             </div>
 
             <div className="md:col-span-1">
               {/* Campus Location with GPS */}
               <div className="space-y-4">
-                <h3 className="text-lg font-medium text-foreground">Campus Location</h3>
+                <h3 className="text-base sm:text-lg font-medium text-foreground">Campus Location</h3>
                 <LocationPicker
                   onLocationChange={handleLocationChange}
                   initialLat={formData.campus_location_lat || undefined}
@@ -200,16 +200,16 @@ export default function ProfilePage() {
                 value={formData.organization_name}
                 onChange={(e) => setFormData(prev => ({ ...prev, organization_name: e.target.value }))}
                 placeholder={formData.role === 'canteen' ? 'e.g., Campus Café' : 'e.g., Local Food Bank'}
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
+                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
               />
             </div>
           )}
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               type="submit"
               disabled={saving}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-lg transition-colors disabled:opacity-50"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-3 rounded-lg text-sm sm:text-base transition-colors disabled:opacity-50"
             >
               {saving ? 'Saving...' : (profile ? 'Update Profile' : 'Create Profile')}
             </button>
@@ -217,7 +217,7 @@ export default function ProfilePage() {
             {profile && (
               <a
                 href="/dashboard"
-                className="border border-border hover:bg-muted text-foreground px-8 py-3 rounded-lg transition-colors"
+                className="border border-border hover:bg-muted text-foreground px-6 sm:px-8 py-3 rounded-lg text-sm sm:text-base text-center transition-colors"
               >
                 Cancel
               </a>

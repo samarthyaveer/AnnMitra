@@ -1,6 +1,8 @@
 import { auth } from '@clerk/nextjs/server'
-import { supabase, supabaseAdmin } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
+import { sendPushNotification } from '@/lib/firebase-admin'
 
 export async function GET(request: Request) {
   try {
@@ -118,9 +120,20 @@ export async function POST(request: Request) {
     }
 
     // Check if listing exists and is available
-    const { data: listing, error: listingError } = await supabase
+    const { data: listing, error: listingError } = await supabaseAdmin
       .from('listings')
-      .select('id, status, owner_id')
+      .select(`
+        id, 
+        status, 
+        owner_id, 
+        title,
+        owner:users(
+          id,
+          name,
+          fcm_token,
+          notifications_enabled
+        )
+      `)
       .eq('id', listing_id)
       .single()
 
@@ -137,7 +150,7 @@ export async function POST(request: Request) {
     }
 
     // Check if user already has a pending/confirmed pickup for this listing
-    const { data: existingPickup } = await supabase
+    const { data: existingPickup } = await supabaseAdmin
       .from('pickups')
       .select('id')
       .eq('listing_id', listing_id)
@@ -152,8 +165,8 @@ export async function POST(request: Request) {
     // Generate pickup code
     const pickupCode = Math.random().toString(36).substring(2, 8).toUpperCase()
 
-    // Create pickup
-    const { data: pickup, error } = await supabase
+    // Create pickup using admin client
+    const { data: pickup, error } = await supabaseAdmin
       .from('pickups')
       .insert({
         listing_id,
@@ -170,10 +183,48 @@ export async function POST(request: Request) {
     }
 
     // Update listing status to claimed
-    await supabase
+    await supabaseAdmin
       .from('listings')
       .update({ status: 'claimed' })
       .eq('id', listing_id)
+
+    // Get claimer details for notification
+    const { data: claimerUser } = await supabaseAdmin
+      .from('users')
+      .select('name')
+      .eq('id', user.id)
+      .single()
+
+    // Send notification to listing owner
+    if (listing.owner && (listing.owner as any).fcm_token && (listing.owner as any).notifications_enabled) {
+      const notificationTitle = 'Food Claimed!'
+      const notificationBody = `${claimerUser?.name || 'Someone'} has claimed your "${listing.title}" listing`
+      
+      await sendPushNotification(
+        (listing.owner as any).fcm_token,
+        notificationTitle,
+        notificationBody,
+        {
+          type: 'listing_claimed',
+          pickup_id: pickup.id,
+          listing_id: listing_id
+        }
+      )
+
+      // Store notification in database
+      await supabaseAdmin
+        .from('notifications')
+        .insert({
+          user_id: listing.owner_id,
+          title: notificationTitle,
+          body: notificationBody,
+          type: 'listing_claimed',
+          data: {
+            pickup_id: pickup.id,
+            listing_id: listing_id
+          }
+        })
+    }
 
     return NextResponse.json({ pickup }, { status: 201 })
   } catch (error) {

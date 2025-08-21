@@ -17,7 +17,7 @@ const MapComponent = dynamic(() => import('@/components/MapComponent'), {
 })
 
 export default function MapView() {
-  const { user, isLoaded } = useUser()
+  const { isLoaded } = useUser()
   const [listings, setListings] = useState<Listing[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null)
@@ -124,33 +124,33 @@ export default function MapView() {
   return (
     <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-6">
+      <div className="bg-gray-800 border-b border-gray-700 p-4 sm:p-6">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-3xl font-bold text-white mb-2">Food Map</h1>
-          <p className="text-gray-400">
+          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Food Map</h1>
+          <p className="text-sm sm:text-base text-gray-400">
             Discover available food near you • {listings.length} locations found
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {loading ? (
-          <div className="flex items-center justify-center h-96">
+          <div className="flex items-center justify-center h-64 sm:h-96">
             <div className="text-green-400">Loading food locations...</div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Map */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 order-2 lg:order-1">
               <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                <div className="p-4 border-b border-gray-700">
-                  <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <div className="p-3 sm:p-4 border-b border-gray-700">
+                  <h2 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                     Available Food Locations
                   </h2>
-                  <p className="text-sm text-gray-400 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-400 mt-1">
                     Click on markers to view details
                   </p>
                 </div>
@@ -160,21 +160,21 @@ export default function MapView() {
                   zoom={12}
                   onMapClick={handleMapClick}
                   markers={mapMarkers}
-                  className="h-96 w-full"
+                  className="h-64 sm:h-80 lg:h-96 w-full"
                 />
               </div>
             </div>
 
             {/* Listing Details */}
-            <div className="space-y-4">
+            <div className="space-y-4 order-1 lg:order-2">
               {selectedListing ? (
-                <div className="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                  <h3 className="text-xl font-semibold text-white mb-4">
+                <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 sm:p-6">
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
                     {selectedListing.title}
                   </h3>
                   
                   {selectedListing.image_url && (
-                    <div className="relative w-full h-32 mb-4">
+                    <div className="relative w-full h-24 sm:h-32 mb-4">
                       <Image 
                         src={selectedListing.image_url} 
                         alt={selectedListing.title}
@@ -211,7 +211,7 @@ export default function MapView() {
                     {selectedListing.available_until && (
                       <div className="flex justify-between">
                         <span className="text-gray-400">Available until:</span>
-                        <span className="text-white">
+                        <span className="text-white text-xs sm:text-sm">
                           {new Date(selectedListing.available_until).toLocaleString()}
                         </span>
                       </div>
@@ -242,13 +242,13 @@ export default function MapView() {
                   </div>
                 </div>
               ) : (
-                <div className="bg-gray-800 rounded-lg border border-gray-700 p-6 text-center">
+                <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 sm:p-6 text-center">
                   <div className="text-gray-400 mb-4">
-                    <svg className="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <h3 className="text-lg font-medium text-white mb-2">
+                  <h3 className="text-base sm:text-lg font-medium text-white mb-2">
                     Select a Location
                   </h3>
                   <p className="text-gray-400 text-sm">
@@ -259,13 +259,13 @@ export default function MapView() {
 
               {/* Listings List */}
               <div className="bg-gray-800 rounded-lg border border-gray-700">
-                <div className="p-4 border-b border-gray-700">
-                  <h3 className="text-lg font-semibold text-white">All Available Food</h3>
+                <div className="p-3 sm:p-4 border-b border-gray-700">
+                  <h3 className="text-base sm:text-lg font-semibold text-white">All Available Food</h3>
                 </div>
                 
-                <div className="max-h-96 overflow-y-auto">
+                <div className="max-h-64 sm:max-h-96 overflow-y-auto">
                   {listings.length === 0 ? (
-                    <div className="p-4 text-center text-gray-400">
+                    <div className="p-4 text-center text-gray-400 text-sm">
                       No food available with GPS coordinates
                     </div>
                   ) : (
@@ -273,11 +273,11 @@ export default function MapView() {
                       {listings.map((listing) => (
                         <div 
                           key={listing.id}
-                          className="p-4 hover:bg-gray-700 cursor-pointer transition-colors"
+                          className="p-3 sm:p-4 hover:bg-gray-700 cursor-pointer transition-colors"
                           onClick={() => setSelectedListing(listing)}
                         >
-                          <h4 className="font-medium text-white">{listing.title}</h4>
-                          <p className="text-sm text-gray-400">
+                          <h4 className="font-medium text-white text-sm sm:text-base">{listing.title}</h4>
+                          <p className="text-xs sm:text-sm text-gray-400">
                             {listing.quantity} {listing.quantity_unit}
                             {listing.owner?.organization_name && (
                               <span> • {listing.owner.organization_name}</span>

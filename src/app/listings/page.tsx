@@ -360,20 +360,20 @@ export default function Listings() {
       {/* Details Modal */}
       {showDetailsModal && selectedListing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 max-w-2xl w-full max-h-screen overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white">Listing Details</h2>
+          <div className="bg-gray-800 rounded-lg border border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-start justify-between mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-white">Listing Details</h2>
                 <button
                   onClick={() => setShowDetailsModal(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white p-1"
                 >
                   ✕
                 </button>
               </div>
 
               {selectedListing.image_url && (
-                <div className="relative h-64 w-full mb-6 rounded-lg overflow-hidden">
+                <div className="relative h-48 sm:h-64 w-full mb-4 sm:mb-6 rounded-lg overflow-hidden">
                   <Image
                     src={selectedListing.image_url}
                     alt={selectedListing.title}
@@ -385,7 +385,7 @@ export default function Listings() {
 
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{selectedListing.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">{selectedListing.title}</h3>
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedListing.status)}`}>
                     {selectedListing.status}
                   </span>
@@ -398,7 +398,7 @@ export default function Listings() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <h4 className="text-sm font-medium text-gray-300 mb-2">Quantity</h4>
                     <p className="text-white">{selectedListing.quantity} {selectedListing.quantity_unit}</p>
@@ -435,22 +435,22 @@ export default function Listings() {
                   </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <h4 className="text-sm font-medium text-gray-300 mb-2">Created</h4>
-                    <p className="text-white">{new Date(selectedListing.created_at).toLocaleString()}</p>
+                    <p className="text-white text-sm">{new Date(selectedListing.created_at).toLocaleString()}</p>
                   </div>
 
                   <div>
                     <h4 className="text-sm font-medium text-gray-300 mb-2">Available Until</h4>
-                    <p className="text-white">
+                    <p className="text-white text-sm">
                       {selectedListing.available_until ? new Date(selectedListing.available_until).toLocaleString() : 'Not set'}
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="flex space-x-3 mt-6">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-6">
                 {selectedListing.status === 'available' && (
                   <button
                     onClick={() => {
@@ -483,13 +483,13 @@ export default function Listings() {
       {/* Edit Modal */}
       {showEditModal && selectedListing && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 max-w-2xl w-full max-h-screen overflow-y-auto">
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white">Edit Listing</h2>
+          <div className="bg-gray-800 rounded-lg border border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+            <div className="p-4 sm:p-6">
+              <div className="flex items-start justify-between mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-white">Edit Listing</h2>
                 <button
                   onClick={() => setShowEditModal(false)}
-                  className="text-gray-400 hover:text-white"
+                  className="text-gray-400 hover:text-white p-1"
                 >
                   ✕
                 </button>
@@ -522,7 +522,7 @@ export default function Listings() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Quantity *
@@ -576,7 +576,7 @@ export default function Listings() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
                       Safety Window (hours)
@@ -617,7 +617,7 @@ export default function Listings() {
                 </div>
               </div>
 
-              <div className="flex space-x-3 mt-6">
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-6">
                 <button
                   onClick={handleUpdateListing}
                   disabled={isUpdating}

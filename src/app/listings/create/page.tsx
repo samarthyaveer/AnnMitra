@@ -7,7 +7,7 @@ import Image from 'next/image'
 import LocationPicker from '@/components/LocationPicker'
 
 export default function CreateListing() {
-  const { user, isLoaded } = useUser()
+  const { isLoaded } = useUser()
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
 

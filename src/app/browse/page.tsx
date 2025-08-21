@@ -3,73 +3,45 @@
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import Image from 'next/image'
-import { Listing, User } from '@/lib/types'
+import { User } from '@/lib/types'
+import { useRealtimeListings } from '@/hooks/useRealtime'
 
 export default function Browse() {
-  const { user, isLoaded } = useUser()
-  const [listings, setListings] = useState<Listing[]>([])
+  const { isLoaded } = useUser()
+  const { listings: realtimeListings, loading: realtimeLoading } = useRealtimeListings()
   const [profile, setProfile] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
   const [claiming, setClaiming] = useState<string | null>(null)
   const [filters, setFilters] = useState({
     food_type: '',
     search: ''
   })
 
+  // Filter listings based on search and food type
+  const filteredListings = realtimeListings.filter(listing => {
+    const matchesSearch = !filters.search || 
+      listing.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+      listing.description?.toLowerCase().includes(filters.search.toLowerCase())
+    
+    const matchesFoodType = !filters.food_type || listing.food_type === filters.food_type
+    
+    return matchesSearch && matchesFoodType && listing.status === 'available'
+  })
+
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch('/api/users')
+        const data = await response.json()
+        setProfile(data.user)
+      } catch (error) {
+        console.error('Error fetching profile:', error)
+      }
+    }
+
     if (isLoaded) {
       fetchProfile()
-      fetchListings()
     }
   }, [isLoaded])
-
-  useEffect(() => {
-    fetchListings()
-  }, [filters])
-
-  const fetchProfile = async () => {
-    try {
-      const response = await fetch('/api/users')
-      const data = await response.json()
-      setProfile(data.user)
-    } catch (error) {
-      console.error('Error fetching profile:', error)
-    }
-  }
-
-  const fetchListings = async () => {
-    try {
-      const params = new URLSearchParams({
-        status: 'available',
-        limit: '20'
-      })
-      
-      if (filters.food_type) {
-        params.append('food_type', filters.food_type)
-      }
-
-      const response = await fetch(`/api/listings?${params}`)
-      const data = await response.json()
-      
-      let filteredListings = data.listings || []
-      
-      // Filter by search term
-      if (filters.search) {
-        const searchTerm = filters.search.toLowerCase()
-        filteredListings = filteredListings.filter((listing: Listing) =>
-          listing.title.toLowerCase().includes(searchTerm) ||
-          listing.description?.toLowerCase().includes(searchTerm) ||
-          listing.owner?.organization_name?.toLowerCase().includes(searchTerm)
-        )
-      }
-      
-      setListings(filteredListings)
-      setLoading(false)
-    } catch (error) {
-      console.error('Error fetching listings:', error)
-      setLoading(false)
-    }
-  }
 
   const handleClaim = async (listingId: string) => {
     if (!profile) {
@@ -92,7 +64,7 @@ export default function Browse() {
       if (response.ok) {
         const data = await response.json()
         alert(`Food claimed successfully! Your pickup code is: ${data.pickup.pickup_code}`)
-        fetchListings() // Refresh listings
+        // Real-time updates will handle the listing status change
       } else {
         const data = await response.json()
         alert(`Error: ${data.error || 'Failed to claim food'}`)
@@ -133,7 +105,7 @@ export default function Browse() {
     )
   }
 
-  if (loading) {
+  if (realtimeLoading) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
         <div className="text-green-400">Loading available food...</div>
@@ -198,7 +170,7 @@ export default function Browse() {
         </div>
 
         {/* Listings Grid */}
-        {listings.length === 0 ? (
+        {filteredListings.length === 0 ? (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">🍽️</div>
             <h2 className="text-2xl font-bold text-white mb-2">No food available</h2>
@@ -206,7 +178,7 @@ export default function Browse() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {listings.map((listing) => (
+            {filteredListings.map((listing) => (
               <div key={listing.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden hover:border-green-600 transition-colors">
                 {/* Image */}
                 {listing.image_url ? (

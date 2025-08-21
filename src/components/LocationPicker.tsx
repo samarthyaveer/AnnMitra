@@ -12,7 +12,18 @@ const MapComponent = dynamic(() => import('./MapComponent'), {
       <div className="text-brand-300">Loading map...</div>
     </div>
   )
-})
+}) as React.ComponentType<{
+  center: LatLngExpression
+  zoom?: number
+  onMapClick?: (lat: number, lng: number) => void
+  className?: string
+  markers?: Array<{
+    position: LatLngExpression
+    popup?: string
+    title?: string
+  }>
+  interactive?: boolean
+}>
 
 interface LocationPickerProps {
   onLocationChange: (lat: number, lng: number, address?: string) => void
@@ -56,16 +67,22 @@ export default function LocationPicker({
         
         // Try to get address from coordinates
         try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`
-          )
-          const data = await response.json()
-          const formattedAddress = data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`
-          setAddress(formattedAddress)
-          onLocationChange(lat, lng, formattedAddress)
+          const response = await fetch(`/api/geocode?lat=${lat}&lng=${lng}`)
+          const result = await response.json()
+          
+          if (result.success && result.address) {
+            setAddress(result.address)
+            onLocationChange(lat, lng, result.address)
+          } else {
+            const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+            setAddress(fallbackAddress)
+            onLocationChange(lat, lng, fallbackAddress)
+          }
         } catch (error) {
           console.error('Error getting address:', error)
-          onLocationChange(lat, lng)
+          const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+          setAddress(fallbackAddress)
+          onLocationChange(lat, lng, fallbackAddress)
         }
         
         setIsLoadingLocation(false)
@@ -94,23 +111,21 @@ export default function LocationPicker({
     )
   }, [onLocationChange])
 
-  // Search for address using Nominatim
+  // Search for address using our geocoding API
   const searchAddress = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) return
 
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&limit=1&addressdetails=1`
-      )
-      const data = await response.json()
+      const response = await fetch(`/api/geocode?q=${encodeURIComponent(searchQuery)}`)
+      const result = await response.json()
       
-      if (data && data.length > 0) {
-        const result = data[0]
-        const lat = parseFloat(result.lat)
-        const lng = parseFloat(result.lon)
+      if (result.success && result.results && result.results.length > 0) {
+        const location = result.results[0]
+        const lat = parseFloat(location.lat)
+        const lng = parseFloat(location.lon)
         setPosition([lat, lng])
-        setAddress(result.display_name)
-        onLocationChange(lat, lng, result.display_name)
+        setAddress(location.display_name)
+        onLocationChange(lat, lng, location.display_name)
         setShowMap(true)
       }
     } catch (error) {
@@ -123,16 +138,22 @@ export default function LocationPicker({
     setPosition([lat, lng])
     
     try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`
-      )
-      const data = await response.json()
-      const formattedAddress = data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`
-      setAddress(formattedAddress)
-      onLocationChange(lat, lng, formattedAddress)
+      const response = await fetch(`/api/geocode?lat=${lat}&lng=${lng}`)
+      const result = await response.json()
+      
+      if (result.success && result.address) {
+        setAddress(result.address)
+        onLocationChange(lat, lng, result.address)
+      } else {
+        const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+        setAddress(fallbackAddress)
+        onLocationChange(lat, lng, fallbackAddress)
+      }
     } catch (error) {
       console.error('Error getting address:', error)
-      onLocationChange(lat, lng)
+      const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`
+      setAddress(fallbackAddress)
+      onLocationChange(lat, lng, fallbackAddress)
     }
   }, [onLocationChange])
 
