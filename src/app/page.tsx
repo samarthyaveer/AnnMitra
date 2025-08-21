@@ -87,10 +87,10 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
-              I'm a Canteen Owner
+              I&apos;m a Canteen Owner
             </button>
             <button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
-              I'm a Student/NGO
+              I&apos;m a Student/NGO
             </button>
           </div>
         </div>

@@ -150,7 +150,7 @@ export default function ProfilePage() {
             <label className="block text-sm font-medium mb-2">Role</label>
             <select
               value={formData.role}
-              onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as any }))}
+              onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as 'student' | 'canteen' | 'ngo' }))}
               className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
               disabled={!!profile} // Can't change role after creation
             >

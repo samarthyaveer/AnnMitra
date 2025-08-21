@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import { Listing } from '@/lib/types'
 
 // Dynamically import the map to avoid SSR issues
@@ -49,8 +50,10 @@ export default function MapView() {
       const response = await fetch('/api/listings?status=available')
       if (response.ok) {
         const data = await response.json()
+        // Extract listings array from response object
+        const allListings = data.listings || []
         // Filter listings that have coordinates
-        const listingsWithCoords = data.filter((listing: Listing) => 
+        const listingsWithCoords = allListings.filter((listing: Listing) => 
           listing.pickup_location_lat && listing.pickup_location_lng
         )
         setListings(listingsWithCoords)
@@ -171,11 +174,14 @@ export default function MapView() {
                   </h3>
                   
                   {selectedListing.image_url && (
-                    <img 
-                      src={selectedListing.image_url} 
-                      alt={selectedListing.title}
-                      className="w-full h-32 object-cover rounded-lg mb-4"
-                    />
+                    <div className="relative w-full h-32 mb-4">
+                      <Image 
+                        src={selectedListing.image_url} 
+                        alt={selectedListing.title}
+                        fill
+                        className="object-cover rounded-lg"
+                      />
+                    </div>
                   )}
                   
                   <div className="space-y-2 text-sm">

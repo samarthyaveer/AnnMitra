@@ -148,7 +148,7 @@ export default function Pickups() {
                     : 'text-gray-400 hover:text-white'
                 }`}
               >
-                My Listings' Pickups
+                My Listings&apos; Pickups
               </button>
             )}
           </div>

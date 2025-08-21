@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function AuthPage() {
   return (
     <div className="container mx-auto px-4 py-16">
@@ -13,12 +15,12 @@ export default function AuthPage() {
             <p className="text-muted-foreground mb-4">
               Create an account and choose your role to start making a difference
             </p>
-            <a 
+            <Link 
               href="/auth/sign-up"
               className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg transition-colors"
             >
               Sign Up
-            </a>
+            </Link>
           </div>
           
           <div className="bg-card border border-border rounded-lg p-6">
@@ -26,12 +28,12 @@ export default function AuthPage() {
             <p className="text-muted-foreground mb-4">
               Sign in to continue your food sharing journey
             </p>
-            <a 
+            <Link 
               href="/auth/sign-in"
               className="inline-block border border-border hover:bg-muted text-foreground px-6 py-3 rounded-lg transition-colors"
             >
               Sign In
-            </a>
+            </Link>
           </div>
         </div>
 

@@ -247,7 +247,7 @@ export async function PUT(request: Request) {
     }
 
     // Update pickup
-    const updateData: any = { status, notes }
+    const updateData: Record<string, string | number | null> = { status, notes }
     
     if (status === 'confirmed') {
       updateData.confirmed_at = new Date().toISOString()
