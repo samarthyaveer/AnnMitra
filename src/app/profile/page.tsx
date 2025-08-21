@@ -3,6 +3,7 @@
 import { useUser } from '@clerk/nextjs'
 import { useState, useEffect } from 'react'
 import { User } from '@/lib/types'
+import LocationPicker from '@/components/LocationPicker'
 
 export default function ProfilePage() {
   const { user: clerkUser, isLoaded } = useUser()
@@ -15,7 +16,9 @@ export default function ProfilePage() {
     email: '',
     phone: '',
     organization_name: '',
-    campus_location: ''
+    campus_location: '',
+    campus_location_lat: null as number | null,
+    campus_location_lng: null as number | null
   })
 
   useEffect(() => {
@@ -41,7 +44,9 @@ export default function ProfilePage() {
           email: data.user.email || '',
           phone: data.user.phone || '',
           organization_name: data.user.organization_name || '',
-          campus_location: data.user.campus_location || ''
+          campus_location: data.user.campus_location || '',
+          campus_location_lat: data.user.campus_location_lat || null,
+          campus_location_lng: data.user.campus_location_lng || null
         })
       }
     } catch (error) {
@@ -49,6 +54,15 @@ export default function ProfilePage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleLocationChange = (lat: number, lng: number, address?: string) => {
+    setFormData(prev => ({
+      ...prev,
+      campus_location_lat: lat,
+      campus_location_lng: lng,
+      campus_location: address || prev.campus_location
+    }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -162,15 +176,17 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-2">Campus Location</label>
-              <input
-                type="text"
-                value={formData.campus_location}
-                onChange={(e) => setFormData(prev => ({ ...prev, campus_location: e.target.value }))}
-                placeholder="e.g., Main Campus, North Wing"
-                className="w-full bg-input border border-border rounded-lg px-4 py-2 text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
-              />
+            <div className="md:col-span-1">
+              {/* Campus Location with GPS */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-medium text-foreground">Campus Location</h3>
+                <LocationPicker
+                  onLocationChange={handleLocationChange}
+                  initialLat={formData.campus_location_lat || undefined}
+                  initialLng={formData.campus_location_lng || undefined}
+                  initialAddress={formData.campus_location}
+                />
+              </div>
             </div>
           </div>
 

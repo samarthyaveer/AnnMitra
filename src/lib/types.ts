@@ -9,6 +9,8 @@ export interface User {
   phone?: string
   organization_name?: string
   campus_location?: string
+  campus_location_lat?: number
+  campus_location_lng?: number
   created_at: string
   updated_at: string
 }

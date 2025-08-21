@@ -38,9 +38,9 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json()
-    const { name, role, email, phone, organization_name, campus_location } = body
+    const { name, role, email, phone, organization_name, campus_location, campus_location_lat, campus_location_lng } = body
 
-    console.log('Creating user with data:', { userId, name, role, email, phone, organization_name, campus_location })
+    console.log('Creating user with data:', { userId, name, role, email, phone, organization_name, campus_location, campus_location_lat, campus_location_lng })
 
     // Validate required fields
     if (!name || !role || !email) {
@@ -76,7 +76,9 @@ export async function POST(request: Request) {
         email,
         phone,
         organization_name,
-        campus_location
+        campus_location,
+        campus_location_lat,
+        campus_location_lng
       })
       .select()
       .single()
@@ -111,7 +113,7 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json()
-    const { name, phone, organization_name, campus_location } = body
+    const { name, phone, organization_name, campus_location, campus_location_lat, campus_location_lng } = body
 
     const { data: user, error } = await supabase
       .from('users')
@@ -119,7 +121,9 @@ export async function PUT(request: Request) {
         name,
         phone,
         organization_name,
-        campus_location
+        campus_location,
+        campus_location_lat,
+        campus_location_lng
       })
       .eq('clerk_id', userId)
       .select()

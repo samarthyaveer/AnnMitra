@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 import Image from 'next/image'
+import LocationPicker from '@/components/LocationPicker'
 
 export default function CreateListing() {
   const { user, isLoaded } = useUser()
@@ -19,8 +20,8 @@ export default function CreateListing() {
     safety_window_hours: '4',
     available_until: '',
     address: '',
-    pickup_location_lat: '',
-    pickup_location_lng: ''
+    pickup_location_lat: null as number | null,
+    pickup_location_lng: null as number | null
   })
 
   const [image, setImage] = useState<File | null>(null)
@@ -33,6 +34,15 @@ export default function CreateListing() {
     setFormData(prev => ({
       ...prev,
       [name]: value
+    }))
+  }
+
+  const handleLocationChange = (lat: number, lng: number, address?: string) => {
+    setFormData(prev => ({
+      ...prev,
+      pickup_location_lat: lat,
+      pickup_location_lng: lng,
+      address: address || prev.address
     }))
   }
 
@@ -79,8 +89,14 @@ export default function CreateListing() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    if (!formData.title || !formData.quantity || !formData.available_until || !formData.address) {
+    if (!formData.title || !formData.quantity || !formData.available_until) {
       alert('Please fill in all required fields')
+      return
+    }
+
+    // Require either address or GPS coordinates
+    if (!formData.address && (!formData.pickup_location_lat || !formData.pickup_location_lng)) {
+      alert('Please provide a pickup location using GPS or enter an address manually')
       return
     }
 
@@ -103,8 +119,8 @@ export default function CreateListing() {
         ...formData,
         quantity: parseFloat(formData.quantity),
         safety_window_hours: parseInt(formData.safety_window_hours),
-        pickup_location_lat: formData.pickup_location_lat ? parseFloat(formData.pickup_location_lat) : null,
-        pickup_location_lng: formData.pickup_location_lng ? parseFloat(formData.pickup_location_lng) : null,
+        pickup_location_lat: formData.pickup_location_lat,
+        pickup_location_lng: formData.pickup_location_lng,
         image_url: imageUrl
       }
 
@@ -290,51 +306,29 @@ export default function CreateListing() {
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-white">Pickup Location</h2>
             
+            <LocationPicker
+              onLocationChange={handleLocationChange}
+              initialLat={formData.pickup_location_lat || undefined}
+              initialLng={formData.pickup_location_lng || undefined}
+              initialAddress={formData.address}
+            />
+            
+            {/* Manual address override */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Address *
+                Additional Instructions (optional)
               </label>
               <textarea
                 name="address"
                 value={formData.address}
                 onChange={handleInputChange}
-                placeholder="Building name, room number, specific instructions..."
+                placeholder="Building name, room number, specific pickup instructions..."
                 rows={2}
                 className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
-                required
               />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Latitude (optional)
-                </label>
-                <input
-                  type="number"
-                  name="pickup_location_lat"
-                  value={formData.pickup_location_lat}
-                  onChange={handleInputChange}
-                  step="any"
-                  placeholder="e.g., 40.7128"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Longitude (optional)
-                </label>
-                <input
-                  type="number"
-                  name="pickup_location_lng"
-                  value={formData.pickup_location_lng}
-                  onChange={handleInputChange}
-                  step="any"
-                  placeholder="e.g., -74.0060"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
-                />
-              </div>
+              <p className="text-sm text-gray-400 mt-1">
+                This will be shown to people picking up the food
+              </p>
             </div>
           </div>
 
