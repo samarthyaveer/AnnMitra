@@ -3,6 +3,7 @@
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import { useState } from 'react'
+import NotificationDropdown from './NotificationDropdown'
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -59,6 +60,7 @@ export default function Header() {
             </SignedOut>
             
             <SignedIn>
+              <NotificationDropdown />
               <UserButton 
                 appearance={{
                   elements: {
@@ -76,6 +78,7 @@ export default function Header() {
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-2">
             <SignedIn>
+              <NotificationDropdown />
               <UserButton 
                 appearance={{
                   elements: {

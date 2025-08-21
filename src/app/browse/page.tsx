@@ -5,10 +5,12 @@ import { useUser } from '@clerk/nextjs'
 import Image from 'next/image'
 import { User } from '@/lib/types'
 import { useRealtimeListings } from '@/hooks/useRealtime'
+import { useNotify } from '@/hooks/useNotify'
 
 export default function Browse() {
   const { isLoaded } = useUser()
   const { listings: realtimeListings, loading: realtimeLoading } = useRealtimeListings()
+  const notify = useNotify()
   const [profile, setProfile] = useState<User | null>(null)
   const [claiming, setClaiming] = useState<string | null>(null)
   const [filters, setFilters] = useState({
@@ -45,7 +47,7 @@ export default function Browse() {
 
   const handleClaim = async (listingId: string) => {
     if (!profile) {
-      alert('Please complete your profile first')
+      notify.profileIncomplete()
       return
     }
 
@@ -63,15 +65,20 @@ export default function Browse() {
 
       if (response.ok) {
         const data = await response.json()
-        alert(`Food claimed successfully! Your pickup code is: ${data.pickup.pickup_code}`)
+        notify.success(
+          'Food Claimed Successfully! 🎉',
+          `Your pickup code is: ${data.pickup.pickup_code}. Save this code for pickup!`,
+          'pickup',
+          '/pickups'
+        )
         // Real-time updates will handle the listing status change
       } else {
         const data = await response.json()
-        alert(`Error: ${data.error || 'Failed to claim food'}`)
+        notify.error('Claim Failed', data.error || 'Failed to claim food. Please try again.', 'pickup')
       }
     } catch (error) {
       console.error('Error claiming food:', error)
-      alert('Error claiming food')
+      notify.error('Claim Error', 'An unexpected error occurred while claiming food.', 'pickup')
     } finally {
       setClaiming(null)
     }

@@ -4,9 +4,11 @@ import { useUser } from '@clerk/nextjs'
 import { useState, useEffect } from 'react'
 import { User } from '@/lib/types'
 import LocationPicker from '@/components/LocationPicker'
+import { useNotify } from '@/hooks/useNotify'
 
 export default function ProfilePage() {
   const { user: clerkUser, isLoaded } = useUser()
+  const notify = useNotify()
   const [profile, setProfile] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -82,14 +84,14 @@ export default function ProfilePage() {
       
       if (response.ok) {
         setProfile(data.user)
-        alert(profile ? 'Profile updated successfully!' : 'Profile created successfully!')
+        notify.profileUpdated()
       } else {
         const errorMessage = data?.error || `Server error: ${response.status} ${response.statusText}`
-        alert(`Error: ${errorMessage}`)
+        notify.error('Profile Error', errorMessage, 'profile')
       }
     } catch (error) {
       console.error('Error saving profile:', error)
-      alert('Error saving profile')
+      notify.error('Save Failed', 'Error saving profile. Please try again.', 'profile')
     } finally {
       setSaving(false)
     }

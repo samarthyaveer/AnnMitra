@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation'
 import { useUser } from '@clerk/nextjs'
 import Image from 'next/image'
 import LocationPicker from '@/components/LocationPicker'
+import { useNotify } from '@/hooks/useNotify'
 
 export default function CreateListing() {
   const { isLoaded } = useUser()
   const router = useRouter()
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const notify = useNotify()
 
   const [formData, setFormData] = useState({
     title: '',
@@ -79,7 +81,7 @@ export default function CreateListing() {
       return data.imageUrl
     } catch (error) {
       console.error('Image upload error:', error)
-      alert('Failed to upload image')
+      notify.error('Upload Failed', 'Failed to upload image. Please try again.', 'listing')
       return null
     } finally {
       setUploading(false)
@@ -90,13 +92,13 @@ export default function CreateListing() {
     e.preventDefault()
     
     if (!formData.title || !formData.quantity || !formData.available_until) {
-      alert('Please fill in all required fields')
+      notify.warning('Missing Information', 'Please fill in all required fields to create your listing.', 'listing')
       return
     }
 
     // Require either address or GPS coordinates
     if (!formData.address && (!formData.pickup_location_lat || !formData.pickup_location_lng)) {
-      alert('Please provide a pickup location using GPS or enter an address manually')
+      notify.warning('Location Required', 'Please provide a pickup location using GPS or enter an address manually.', 'listing')
       return
     }
 
@@ -133,15 +135,17 @@ export default function CreateListing() {
       })
 
       if (response.ok) {
-        alert('Listing created successfully!')
+        const data = await response.json()
+        const listingId = data.listing?.id || 'new'
+        notify.listingCreated(formData.title, listingId)
         router.push('/dashboard')
       } else {
         const data = await response.json()
-        alert(`Error: ${data.error || 'Failed to create listing'}`)
+        notify.error('Creation Failed', data.error || 'Failed to create listing. Please try again.', 'listing')
       }
     } catch (error) {
       console.error('Error creating listing:', error)
-      alert('Error creating listing')
+      notify.error('Creation Error', 'An unexpected error occurred while creating your listing.', 'listing')
     } finally {
       setCreating(false)
     }
