@@ -1,17 +1,11 @@
 {
   "version": 2,
   "name": "annmitra",
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
   "env": {
     "NEXT_PUBLIC_APP_URL": "https://annmitra.vercel.app"
   },
   "functions": {
-    "app/**/*": {
+    "app/api/**/*": {
       "maxDuration": 30
     }
   },
@@ -35,6 +29,10 @@
         {
           "key": "Service-Worker-Allowed",
           "value": "/"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
         }
       ]
     },

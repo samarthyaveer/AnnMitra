@@ -7,14 +7,15 @@ const nextConfig: NextConfig = {
   
   // Image optimization
   images: {
-    domains: ['hxosmqwwgjxzuxsduado.supabase.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'hxosmqwwgjxzuxsduado.supabase.co',
+        port: '',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
     formats: ['image/webp', 'image/avif'],
-  },
-  
-  // Experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-    scrollRestoration: true,
   },
   
   // Headers for security and PWA
@@ -26,6 +27,10 @@ const nextConfig: NextConfig = {
           {
             key: 'Content-Type',
             value: 'application/manifest+json',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
@@ -56,19 +61,6 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
-  },
-  
-  // Webpack optimizations
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
-      };
-    }
-    return config;
   },
 };
 
