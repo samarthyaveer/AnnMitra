@@ -2,13 +2,13 @@
 -- Run this after the base schema to add Phase 6 features
 
 -- Add FCM token and notification preferences to users table
-ALTER TABLE users ADD COLUMN fcm_token TEXT;
-ALTER TABLE users ADD COLUMN notifications_enabled BOOLEAN DEFAULT true;
-ALTER TABLE users ADD COLUMN campus_location_lat DECIMAL(10,8);
-ALTER TABLE users ADD COLUMN campus_location_lng DECIMAL(11,8);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS fcm_token TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS notifications_enabled BOOLEAN DEFAULT true;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS campus_location_lat DECIMAL(10,8);
+ALTER TABLE users ADD COLUMN IF NOT EXISTS campus_location_lng DECIMAL(11,8);
 
 -- Create notifications table
-CREATE TABLE notifications (
+CREATE TABLE IF NOT EXISTS notifications (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   user_id UUID REFERENCES users(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
@@ -20,26 +20,51 @@ CREATE TABLE notifications (
 );
 
 -- Create indexes for notifications
-CREATE INDEX idx_notifications_user_id ON notifications(user_id);
-CREATE INDEX idx_notifications_read ON notifications(read);
-CREATE INDEX idx_notifications_created_at ON notifications(created_at);
-CREATE INDEX idx_notifications_type ON notifications(type);
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_read ON notifications(read);
+CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON notifications(created_at);
+CREATE INDEX IF NOT EXISTS idx_notifications_type ON notifications(type);
 
 -- Add RLS for notifications
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
 
 -- Users can only see their own notifications
+DROP POLICY IF EXISTS "Users can view own notifications" ON notifications;
 CREATE POLICY "Users can view own notifications" ON notifications FOR SELECT USING (
   EXISTS (SELECT 1 FROM users WHERE clerk_id = auth.uid()::text AND users.id = notifications.user_id)
 );
+DROP POLICY IF EXISTS "Users can update own notifications" ON notifications;
 CREATE POLICY "Users can update own notifications" ON notifications FOR UPDATE USING (
   EXISTS (SELECT 1 FROM users WHERE clerk_id = auth.uid()::text AND users.id = notifications.user_id)
 );
 
--- Enable realtime for important tables
-ALTER PUBLICATION supabase_realtime ADD TABLE listings;
-ALTER PUBLICATION supabase_realtime ADD TABLE pickups;
-ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
+-- Enable realtime for important tables (safe to run multiple times)
+DO $$
+BEGIN
+  -- Add listings to realtime if not already added
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND tablename = 'listings'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE listings;
+  END IF;
+
+  -- Add pickups to realtime if not already added
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND tablename = 'pickups'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE pickups;
+  END IF;
+
+  -- Add notifications to realtime if not already added
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_publication_tables 
+    WHERE pubname = 'supabase_realtime' AND tablename = 'notifications'
+  ) THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE notifications;
+  END IF;
+END $$;
 
 -- Create function to generate pickup codes
 CREATE OR REPLACE FUNCTION generate_pickup_code()
@@ -53,22 +78,34 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION set_pickup_code()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.status = 'confirmed' AND (OLD.status != 'confirmed' OR OLD.pickup_code IS NULL) THEN
+  -- For new pickups, generate pickup code if not already set
+  IF TG_OP = 'INSERT' AND NEW.pickup_code IS NULL THEN
     NEW.pickup_code = generate_pickup_code();
     NEW.confirmed_at = NOW();
   END IF;
   
-  IF NEW.status = 'collected' AND OLD.status != 'collected' THEN
-    NEW.collected_at = NOW();
+  -- For updates, handle status changes
+  IF TG_OP = 'UPDATE' THEN
+    IF NEW.status = 'confirmed' AND (OLD.status != 'confirmed' OR OLD.pickup_code IS NULL) THEN
+      IF NEW.pickup_code IS NULL THEN
+        NEW.pickup_code = generate_pickup_code();
+      END IF;
+      NEW.confirmed_at = NOW();
+    END IF;
+    
+    IF NEW.status = 'collected' AND OLD.status != 'collected' THEN
+      NEW.collected_at = NOW();
+    END IF;
   END IF;
   
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
--- Apply pickup code trigger
+-- Apply pickup code trigger for both INSERT and UPDATE
+DROP TRIGGER IF EXISTS trigger_set_pickup_code ON pickups;
 CREATE TRIGGER trigger_set_pickup_code 
-  BEFORE UPDATE ON pickups 
+  BEFORE INSERT OR UPDATE ON pickups 
   FOR EACH ROW 
   EXECUTE FUNCTION set_pickup_code();
 
@@ -96,6 +133,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Apply listing status update trigger
+DROP TRIGGER IF EXISTS trigger_update_listing_status ON pickups;
 CREATE TRIGGER trigger_update_listing_status 
   AFTER UPDATE ON pickups 
   FOR EACH ROW 
