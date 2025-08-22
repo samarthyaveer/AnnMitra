@@ -1,100 +1,252 @@
+'use client'
+
+import { SignedIn, SignedOut } from '@clerk/nextjs'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+
 export default function Home() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false)
+  }
+  useEffect(() => {
+    // Add scroll-triggered animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).style.animationDelay = '0.2s';
+          entry.target.classList.add('fade-in');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements that should animate
+    const animatedElements = document.querySelectorAll('.stat-card, .process-card, .cta-card > *');
+    animatedElements.forEach(el => observer.observe(el));
+
+    // Smooth scroll for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach((anchor: Element) => {
+      anchor.addEventListener('click', function (this: HTMLElement, e: Event) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href') || '');
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Add subtle parallax effect to background circles
+    const handleScroll = () => {
+      const scrolled = window.pageYOffset;
+      const circles = document.querySelectorAll('.bg-circle');
+      
+      circles.forEach((circle, index) => {
+        const speed = 0.5 + (index * 0.1);
+        (circle as HTMLElement).style.transform = `translateY(${scrolled * speed}px)`;
+      });
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="text-center max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
-            Reduce Food Waste,
-            <br />
-            Feed Your Community
-          </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 leading-relaxed">
-            Connect surplus food from campus canteens with students and NGOs. 
-            Turn waste into meals, build community, and create positive environmental impact.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto">
-              Get Started
-            </button>
-            <button className="border border-border hover:bg-muted text-foreground px-8 py-4 rounded-lg text-lg font-semibold transition-colors w-full sm:w-auto">
-              Learn More
-            </button>
+    <>
+      {/* Show custom landing page only for signed out users */}
+      <SignedOut>
+        <div className="landing-page">
+          {/* Animated background elements */}
+          <div className="bg-decoration">
+            <div className="bg-circle"></div>
+            <div className="bg-circle"></div>
+            <div className="bg-circle"></div>
           </div>
-        </div>
-      </section>
 
-      {/* Stats Section */}
-      <section className="bg-card/50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">2.5K+</div>
-              <div className="text-muted-foreground">Meals Shared</div>
+          {/* Landing Navigation */}
+          <nav className="glass landing-nav">
+            <div className="nav-content">
+              <div className="logo">
+                <div className="logo-icon">A</div>
+                <span>AnnMitra</span>
+              </div>
+              <div className="nav-links">
+                <Link href="/browse">Browse Food</Link>
+                <Link href="/map">Map</Link>
+                <Link href="/auth/sign-in" className="sign-in-btn">Sign In</Link>
+              </div>
+              
+              {/* Mobile Menu Button */}
+              <div className="mobile-menu-btn">
+                <button
+                  onClick={toggleMobileMenu}
+                  className="mobile-menu-toggle"
+                  aria-label="Toggle mobile menu"
+                >
+                  {isMobileMenuOpen ? (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                  )}
+                </button>
+              </div>
             </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">50+</div>
-              <div className="text-muted-foreground">Campus Partners</div>
-            </div>
-            <div>
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2">1.2T</div>
-              <div className="text-muted-foreground">CO₂ Saved (kg)</div>
-            </div>
-          </div>
-        </div>
-      </section>
+            
+            {/* Mobile Navigation Menu */}
+            {isMobileMenuOpen && (
+              <div className="mobile-nav-menu">
+                <Link 
+                  href="/browse" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  Browse Food
+                </Link>
+                <Link 
+                  href="/map" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  Map
+                </Link>
+                <Link 
+                  href="/auth/sign-in" 
+                  className="mobile-nav-link mobile-signin-btn"
+                  onClick={closeMobileMenu}
+                >
+                  Sign In
+                </Link>
+              </div>
+            )}
+          </nav>
 
-      {/* How It Works */}
-      <section className="container mx-auto px-4 py-16">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">🏢</span>
+          {/* Hero Section */}
+          <section className="hero">
+            <h1 className="fade-in">Reduce Food Waste,<br />Feed Your Community</h1>
+            <p className="fade-in">Connect surplus food from campus canteens with students and NGOs. Turn waste into meals, build community, and create positive environmental impact.</p>
+            <div className="cta-buttons fade-in">
+              <Link href="/auth/sign-in" className="btn-primary">Get Started</Link>
+              <a href="#learn" className="btn-secondary">Learn More</a>
             </div>
-            <h3 className="text-xl font-semibold mb-2">Canteens Share</h3>
-            <p className="text-muted-foreground">
-              Campus canteens and restaurants post surplus food with pickup details
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">👥</span>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Community Claims</h3>
-            <p className="text-muted-foreground">
-              Students and NGOs browse and claim food that would otherwise go to waste
-            </p>
-          </div>
-          <div className="text-center">
-            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-2xl">🌱</span>
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Impact Created</h3>
-            <p className="text-muted-foreground">
-              Track environmental savings and community impact in real-time
-            </p>
-          </div>
-        </div>
-      </section>
+          </section>
 
-      {/* CTA Section */}
-      <section className="bg-primary/10 py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Make a Difference?</h2>
-          <p className="text-xl text-muted-foreground mb-8">
-            Join the movement to reduce food waste and strengthen campus community
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
-              I&apos;m a Canteen Owner
-            </button>
-            <button className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
-              I&apos;m a Student/NGO
-            </button>
-          </div>
+          {/* Stats Section */}
+          <section className="stats" id="learn">
+            <div className="stats-container glass">
+              <div className="stat-card fade-in">
+                <div className="stat-number">2.5K+</div>
+                <div className="stat-label">Meals Shared</div>
+              </div>
+              <div className="stat-card fade-in">
+                <div className="stat-number">50+</div>
+                <div className="stat-label">Campus Partners</div>
+              </div>
+              <div className="stat-card fade-in">
+                <div className="stat-number">1.2T</div>
+                <div className="stat-label">CO₂ Saved (kg)</div>
+              </div>
+            </div>
+          </section>
+
+          {/* How It Works */}
+          <section className="how-it-works">
+            <h2 className="section-title fade-in">How It Works</h2>
+            <div className="process-grid">
+              <div className="process-card glass-card fade-in">
+                <div className="process-icon">�</div>
+                <h3 className="process-title">Canteens Share</h3>
+                <p className="process-description">Campus canteens and restaurants post surplus food with pickup details</p>
+              </div>
+              <div className="process-card glass-card fade-in">
+                <div className="process-icon">👥</div>
+                <h3 className="process-title">Community Claims</h3>
+                <p className="process-description">Students and NGOs browse and claim food that would otherwise go to waste</p>
+              </div>
+              <div className="process-card glass-card fade-in">
+                <div className="process-icon">🌱</div>
+                <h3 className="process-title">Impact Created</h3>
+                <p className="process-description">Track environmental savings and community impact in real-time</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Final CTA */}
+          <section className="final-cta">
+            <div className="cta-card glass">
+              <h2 className="cta-title fade-in">Ready to Make a Difference?</h2>
+              <p className="cta-subtitle fade-in">Join the movement to reduce food waste and strengthen campus community</p>
+              <div className="role-buttons fade-in">
+                <Link href="/auth/sign-in" className="role-btn">I&apos;m a Canteen Owner</Link>
+                <Link href="/auth/sign-in" className="role-btn secondary">I&apos;m a Student/NGO</Link>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+      </SignedOut>
+
+      {/* Show simple dashboard for signed in users */}
+      <SignedIn>
+        <div className="min-h-screen">
+          {/* Stats Section */}
+          <section className="stats">
+            <div className="stats-container glass">
+              <div className="stat-card">
+                <div className="stat-number">2.5K+</div>
+                <div className="stat-label">Meals Shared</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">50+</div>
+                <div className="stat-label">Campus Partners</div>
+              </div>
+              <div className="stat-card">
+                <div className="stat-number">1.2T</div>
+                <div className="stat-label">CO₂ Saved (kg)</div>
+              </div>
+            </div>
+          </section>
+
+          {/* How It Works */}
+          <section className="how-it-works">
+            <h2 className="section-title">How It Works</h2>
+            <div className="process-grid">
+              <div className="process-card glass-card">
+                <div className="process-icon">🏪</div>
+                <h3 className="process-title">Canteens Share</h3>
+                <p className="process-description">Campus canteens and restaurants post surplus food with pickup details</p>
+              </div>
+              <div className="process-card glass-card">
+                <div className="process-icon">👥</div>
+                <h3 className="process-title">Community Claims</h3>
+                <p className="process-description">Students and NGOs browse and claim food that would otherwise go to waste</p>
+              </div>
+              <div className="process-card glass-card">
+                <div className="process-icon">🌱</div>
+                <h3 className="process-title">Impact Created</h3>
+                <p className="process-description">Track environmental savings and community impact in real-time</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </SignedIn>
+    </>
   );
 }
