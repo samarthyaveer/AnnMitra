@@ -2,7 +2,6 @@
 
 // import { AnalysisResult } from '@/lib/transaction-analyzer'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts'
-import { format } from 'date-fns'
 
 interface AnalysisResult {
   summary: any
@@ -24,17 +23,81 @@ const COLORS = ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444', '#06B6D4'
 
 export default function AnalysisResults({ result, onStartNew }: AnalysisResultsProps) {
   
-  // Prepare chart data
-  const dailyChartData = result.dailyPatterns.map(pattern => ({
-    date: format(new Date(pattern.day), 'MMM dd'),
-    transactions: pattern.avgTransactions,
-    revenue: pattern.totalRevenue
-  }))
+  // Safety check for result object
+  if (!result) {
+    return (
+      <div className="text-white p-4">
+        <p>No analysis results available.</p>
+        <button onClick={onStartNew} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg mt-4">
+          Start New Analysis
+        </button>
+      </div>
+    )
+  }
 
-  const hourlyChartData = result.hourlyPatterns.map(pattern => ({
-    hour: pattern.hour,
-    transactions: pattern.avgTransactions,
-    revenue: pattern.revenuePercentage
+  console.log('Full result object:', result)
+  console.log('Daily patterns:', result.dailyPatterns)
+  console.log('Hourly patterns:', result.hourlyPatterns)
+  
+  // Helper function to safely format dates
+  const safeFormatDate = (dateString: string, index: number) => {
+    try {
+      console.log(`Processing date ${index}:`, dateString)
+      
+      if (!dateString) {
+        console.warn(`Empty date string at index ${index}`)
+        return `Day ${index + 1}`
+      }
+
+      // Try different date parsing approaches
+      let dateObj: Date | null = null
+      
+      // First try: direct parsing
+      dateObj = new Date(dateString)
+      if (!isNaN(dateObj.getTime())) {
+        const month = dateObj.getMonth() + 1
+        const day = dateObj.getDate()
+        return `${month}/${day}`
+      }
+
+      // Second try: manual parsing for YYYY-MM-DD format
+      if (dateString.includes('-')) {
+        const parts = dateString.split('-')
+        if (parts.length === 3) {
+          const year = parseInt(parts[0])
+          const month = parseInt(parts[1])
+          const day = parseInt(parts[2])
+          
+          if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+            return `${month}/${day}`
+          }
+        }
+      }
+
+      console.warn(`Could not parse date: ${dateString}`)
+      return `Day ${index + 1}`
+      
+    } catch (error) {
+      console.error('Error in safeFormatDate:', error, 'Input:', dateString)
+      return `Day ${index + 1}`
+    }
+  }
+
+  // Prepare chart data with robust error handling
+  const dailyChartData = (result.dailyPatterns || []).map((pattern, index) => {
+    const formattedDate = safeFormatDate(pattern.date || pattern.day || '', index)
+    
+    return {
+      date: formattedDate,
+      transactions: Math.max(0, pattern.totalTransactions || pattern.avgTransactions || 0),
+      revenue: Math.max(0, pattern.totalRevenue || 0)
+    }
+  })
+
+  const hourlyChartData = (result.hourlyPatterns || []).map((pattern, index) => ({
+    hour: pattern.hour || index,
+    transactions: Math.max(0, pattern.averageTransactions || pattern.avgTransactions || 0),
+    revenue: Math.max(0, pattern.averageTransactions || pattern.avgTransactions || 0)
   }))
 
   const foodItemChartData = result.foodItems?.map((food: any, index: number) => ({
