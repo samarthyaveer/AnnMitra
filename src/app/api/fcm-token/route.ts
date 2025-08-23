@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function DELETE(_request: NextRequest) {
+export async function DELETE() {
   try {
     const { userId } = await auth()
     if (!userId) {

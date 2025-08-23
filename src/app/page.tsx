@@ -3,6 +3,7 @@
 import { SignedIn, SignedOut } from '@clerk/nextjs'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import PublicStats from '@/components/analytics/PublicStats'
 
 export default function Home() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -167,6 +168,9 @@ export default function Home() {
             </div>
           </section>
 
+          {/* Analytics Section */}
+          <PublicStats />
+
           {/* How It Works */}
           <section className="how-it-works">
             <h2 className="section-title fade-in">How It Works</h2>
@@ -206,6 +210,9 @@ export default function Home() {
       {/* Show simple dashboard for signed in users */}
       <SignedIn>
         <div className="min-h-screen">
+          {/* Analytics Section */}
+          <PublicStats />
+
           {/* Stats Section */}
           <section className="stats">
             <div className="stats-container glass">

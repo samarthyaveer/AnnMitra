@@ -4,6 +4,7 @@ import { useUser } from '@clerk/nextjs'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { User, Listing, Pickup } from '@/lib/types'
+import DashboardStats from '@/components/analytics/DashboardStats'
 
 export default function Dashboard() {
   const { isLoaded, user } = useUser()
@@ -153,6 +154,12 @@ export default function Dashboard() {
             <p className="text-lg sm:text-xl lg:text-2xl font-bold text-green-400">{stats.completedPickups}</p>
           </div>
         </div>
+
+        {/* Analytics Section */}
+        <DashboardStats 
+          userRole={profile.role as 'canteen' | 'user' | 'ngo'} 
+          userId={profile.id} 
+        />
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">

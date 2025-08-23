@@ -58,7 +58,6 @@ export default function NotificationDropdown() {
     unreadCount,
     markAsRead,
     markAllAsRead,
-    removeNotification,
     clearAll
   } = useNotificationContext()
 
