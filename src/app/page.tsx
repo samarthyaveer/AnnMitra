@@ -72,7 +72,27 @@ export default function Home() {
       {/* Show custom landing page only for signed out users */}
       <SignedOut>
           {/* Landing Navigation */}
-          <nav className="glass landing-nav">
+          <nav 
+            className="glass landing-nav backdrop-blur-strong"
+            style={{
+              position: 'fixed',
+              top: '20px',
+              left: '50%',
+              transform: 'translateX(-50%) translateZ(0)',
+              zIndex: 1000,
+              padding: '16px 32px',
+              width: '95%',
+              maxWidth: '1400px',
+              minHeight: '70px',
+              backdropFilter: 'blur(35px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+              background: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              borderRadius: '20px',
+              willChange: 'backdrop-filter',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+            }}
+          >
             <div className="nav-content">
               <div className="logo">
                 <div className="logo-icon">A</div>

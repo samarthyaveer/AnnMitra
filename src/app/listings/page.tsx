@@ -388,8 +388,28 @@ export default function Listings() {
 
       {/* Details Modal */}
       {showDetailsModal && selectedListing && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-          <div className="glass-nav max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-modal flex items-center justify-center p-4 z-50"
+          style={{
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            background: 'rgba(0, 0, 0, 0.8)',
+            transform: 'translateZ(0)',
+            willChange: 'backdrop-filter'
+          }}
+        >
+          <div 
+            className="glass-nav max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4"
+            style={{
+              backdropFilter: 'blur(35px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '20px',
+              transform: 'translateZ(0)',
+              willChange: 'backdrop-filter'
+            }}
+          >
             <div className="p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4 sm:mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-white">Listing Details</h2>
@@ -513,8 +533,28 @@ export default function Listings() {
 
       {/* Edit Modal */}
       {showEditModal && selectedListing && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-          <div className="glass-nav max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-modal flex items-center justify-center p-4 z-50"
+          style={{
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+            background: 'rgba(0, 0, 0, 0.8)',
+            transform: 'translateZ(0)',
+            willChange: 'backdrop-filter'
+          }}
+        >
+          <div 
+            className="glass-nav max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4"
+            style={{
+              backdropFilter: 'blur(35px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '20px',
+              transform: 'translateZ(0)',
+              willChange: 'backdrop-filter'
+            }}
+          >
             <div className="p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4 sm:mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-white">Edit Listing</h2>

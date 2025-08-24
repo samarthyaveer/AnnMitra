@@ -34,7 +34,18 @@ export default function Header() {
     <>
       <SignedOut>
         {!isLandingPage && (
-          <header className="glass-nav fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl mx-auto">
+          <header 
+            className="glass-nav backdrop-blur-strong fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl mx-auto"
+            style={{
+              backdropFilter: 'blur(35px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+              background: 'rgba(255, 255, 255, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              borderRadius: '20px',
+              transform: 'translateX(-50%) translateZ(0)',
+              willChange: 'backdrop-filter'
+            }}
+          >
             <div className="px-6 py-4">
               <div className="flex justify-between items-center">
                 {/* Logo */}
@@ -116,7 +127,18 @@ export default function Header() {
       </SignedOut>
 
       <SignedIn>
-        <header className="glass-nav fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl mx-auto">
+        <header 
+          className="glass-nav backdrop-blur-strong fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl mx-auto"
+          style={{
+            backdropFilter: 'blur(35px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+            background: 'rgba(255, 255, 255, 0.08)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '20px',
+            transform: 'translateX(-50%) translateZ(0)',
+            willChange: 'backdrop-filter'
+          }}
+        >
           <div className="px-6 py-4">
             <div className="flex justify-between items-center">
               {/* Logo */}

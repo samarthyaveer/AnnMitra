@@ -121,7 +121,18 @@ export default function NotificationDropdown() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 glass-nav border border-gray-600 shadow-xl z-50 max-h-96 overflow-hidden">
+        <div 
+          className="notification-dropdown absolute right-0 mt-2 w-80 glass-nav backdrop-blur-strong border border-gray-600 shadow-xl z-50 max-h-96 overflow-hidden"
+          style={{
+            backdropFilter: 'blur(35px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+            background: 'rgba(255, 255, 255, 0.08)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '20px',
+            transform: 'translateZ(0)',
+            willChange: 'backdrop-filter'
+          }}
+        >
           {/* Header */}
           <div className="p-4 border-b border-gray-600 flex justify-between items-center">
             <h3 className="text-lg font-semibold text-white">Notifications</h3>

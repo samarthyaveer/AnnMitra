@@ -168,8 +168,28 @@ export default function PWAInstallPrompt() {
 // iOS Install Instructions Component (optional)
 export function IOSInstallInstructions({ onClose }: { onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
-      <div className="glass-nav max-w-sm w-full p-6">
+    <div 
+      className="fixed inset-0 bg-black/80 backdrop-blur-modal flex items-center justify-center p-4 z-50"
+      style={{
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        background: 'rgba(0, 0, 0, 0.8)',
+        transform: 'translateZ(0)',
+        willChange: 'backdrop-filter'
+      }}
+    >
+      <div 
+        className="glass-nav backdrop-blur-strong max-w-sm w-full p-6"
+        style={{
+          backdropFilter: 'blur(35px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(35px) saturate(180%)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          borderRadius: '20px',
+          transform: 'translateZ(0)',
+          willChange: 'backdrop-filter'
+        }}
+      >
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-medium text-white">Install AnnMitra</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
