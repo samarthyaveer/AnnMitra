@@ -32,7 +32,7 @@ export interface Listing {
   pickup_location_lng?: number
   address?: string
   image_url?: string
-  status: 'available' | 'claimed' | 'picked_up' | 'expired' | 'cancelled'
+  status: 'available' | 'claimed' | 'picked_up' | 'unavailable' | 'cancelled'
   created_at: string
   updated_at: string
   owner?: User // populated via join
@@ -57,7 +57,7 @@ export interface Notification {
   user_id: string
   title: string
   body: string
-  type: 'listing_claimed' | 'pickup_confirmed' | 'pickup_ready' | 'pickup_completed' | 'listing_expired'
+  type: 'listing_claimed' | 'pickup_confirmed' | 'pickup_ready' | 'pickup_completed' | 'listing_unavailable'
   data?: Record<string, string>
   read: boolean
   created_at: string

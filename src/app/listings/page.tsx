@@ -14,7 +14,16 @@ export default function Listings() {
   const [selectedListing, setSelectedListing] = useState<Listing | null>(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
-  const [editForm, setEditForm] = useState<Partial<Listing>>({})
+  const [editForm, setEditForm] = useState<{
+    title?: string;
+    description?: string;
+    quantity?: number;
+    quantity_unit?: string;
+    food_type?: string;
+    address?: string;
+    safety_window_days?: string;
+    safety_window_hours?: string;
+  }>({})
   const [isUpdating, setIsUpdating] = useState(false)
 
   useEffect(() => {
@@ -60,8 +69,8 @@ export default function Listings() {
     switch (status) {
       case 'available': return 'bg-green-900 text-green-400'
       case 'claimed': return 'bg-yellow-900 text-yellow-400'
-      case 'picked_up': return 'bg-blue-900 text-blue-400'
-      case 'expired': return 'bg-red-900 text-red-400'
+      case 'picked_up': return 'bg-green-900 text-green-400'
+      case 'unavailable': return 'bg-red-900 text-red-400'
       case 'cancelled': return 'bg-gray-700 text-gray-400'
       default: return 'bg-gray-700 text-gray-400'
     }
@@ -72,7 +81,7 @@ export default function Listings() {
     const until = new Date(availableUntil)
     const diff = until.getTime() - now.getTime()
     
-    if (diff <= 0) return 'Expired'
+    if (diff <= 0) return 'Unavailable'
     
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
@@ -94,13 +103,18 @@ export default function Listings() {
 
   const handleEdit = (listing: Listing) => {
     setSelectedListing(listing)
+    // Convert safety_window_hours to days and hours for editing
+    const totalHours = listing.safety_window_hours || 4
+    const days = Math.floor(totalHours / 24)
+    const hours = totalHours % 24
+    
     setEditForm({
       title: listing.title,
       description: listing.description,
       quantity: listing.quantity,
       quantity_unit: listing.quantity_unit,
-      safety_window_hours: listing.safety_window_hours,
-      available_until: listing.available_until ? new Date(listing.available_until).toISOString().slice(0, 16) : '',
+      safety_window_days: days.toString(),
+      safety_window_hours: hours.toString(),
       food_type: listing.food_type,
       address: listing.address
     })
@@ -112,12 +126,25 @@ export default function Listings() {
 
     setIsUpdating(true)
     try {
+      // Calculate available until time based on safety window
+      const now = new Date()
+      const days = parseInt(String(editForm.safety_window_days || '0')) || 0
+      const hours = parseInt(String(editForm.safety_window_hours || '0')) || 0
+      const totalHours = (days * 24) + hours
+      const availableUntil = new Date(now.getTime() + (totalHours * 60 * 60 * 1000))
+
+      const updatedForm = {
+        ...editForm,
+        safety_window_hours: totalHours,
+        available_until: availableUntil.toISOString()
+      }
+
       const response = await fetch(`/api/listings/${selectedListing.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(editForm)
+        body: JSON.stringify(updatedForm)
       })
 
       if (response.ok) {
@@ -301,7 +328,7 @@ export default function Listings() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">Available for:</span>
                       <span className={`font-medium ${
-                        getTimeRemaining(listing.available_until || '') === 'Expired' 
+                        getTimeRemaining(listing.available_until || '') === 'Unavailable' 
                           ? 'text-red-400' 
                           : 'text-green-400'
                       }`}>
@@ -315,11 +342,6 @@ export default function Listings() {
                         <span className="text-white">{listing.food_type.replace('_', ' ')}</span>
                       </div>
                     )}
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Safety window:</span>
-                      <span className="text-white">{listing.safety_window_hours}h</span>
-                    </div>
 
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">Created:</span>
@@ -412,14 +434,9 @@ export default function Listings() {
                   )}
 
                   <div>
-                    <h4 className="text-sm font-medium text-gray-300 mb-2">Safety Window</h4>
-                    <p className="text-white">{selectedListing.safety_window_hours} hours</p>
-                  </div>
-
-                  <div>
                     <h4 className="text-sm font-medium text-gray-300 mb-2">Available For</h4>
                     <p className={`font-medium ${
-                      getTimeRemaining(selectedListing.available_until || '') === 'Expired' 
+                      getTimeRemaining(selectedListing.available_until || '') === 'Unavailable' 
                         ? 'text-red-400' 
                         : 'text-green-400'
                     }`}>
@@ -576,30 +593,48 @@ export default function Listings() {
                   </select>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
+                  {/* Safety Window */}
                   <div>
                     <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Safety Window (hours)
+                      Safety Window *
                     </label>
-                    <input
-                      type="number"
-                      value={editForm.safety_window_hours || 4}
-                      onChange={(e) => setEditForm({ ...editForm, safety_window_hours: parseInt(e.target.value) })}
-                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
-                      placeholder="4"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Available Until *
-                    </label>
-                    <input
-                      type="datetime-local"
-                      value={editForm.available_until || ''}
-                      onChange={(e) => setEditForm({ ...editForm, available_until: e.target.value })}
-                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
-                    />
+                    <p className="text-xs text-gray-400 mb-3">How long should this food be available for pickup?</p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs text-gray-400 mb-1">Days</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="7"
+                          name="safety_window_days"
+                          value={editForm.safety_window_days || '0'}
+                          onChange={(e) => setEditForm({ ...editForm, safety_window_days: e.target.value })}
+                          className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-400 mb-1">Hours</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="23"
+                          name="safety_window_hours"
+                          value={editForm.safety_window_hours || '0'}
+                          onChange={(e) => setEditForm({ ...editForm, safety_window_hours: e.target.value })}
+                          className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-2 text-xs text-gray-400">
+                      Available until: {(() => {
+                        const days = parseInt(String(editForm.safety_window_days || '0')) || 0
+                        const hours = parseInt(String(editForm.safety_window_hours || '0')) || 0
+                        const totalHours = (days * 24) + hours
+                        const availableUntil = new Date(Date.now() + (totalHours * 60 * 60 * 1000))
+                        return availableUntil.toLocaleString()
+                      })()}
+                    </div>
                   </div>
                 </div>
 

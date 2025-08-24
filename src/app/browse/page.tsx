@@ -26,7 +26,11 @@ export default function Browse() {
     
     const matchesFoodType = !filters.food_type || listing.food_type === filters.food_type
     
-    return matchesSearch && matchesFoodType && listing.status === 'available'
+    // Check if listing is still available (not unavailable)
+    const isNotUnavailable = listing.available_until ? 
+      new Date(listing.available_until) > new Date() : true
+    
+    return matchesSearch && matchesFoodType && listing.status === 'available' && isNotUnavailable
   })
 
   useEffect(() => {
@@ -89,7 +93,7 @@ export default function Browse() {
     const until = new Date(availableUntil)
     const diff = until.getTime() - now.getTime()
     
-    if (diff <= 0) return 'Expired'
+    if (diff <= 0) return 'Unavailable'
     
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
@@ -229,7 +233,7 @@ export default function Browse() {
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-gray-400">Available for:</span>
                       <span className={`font-medium ${
-                        getTimeRemaining(listing.available_until || '') === 'Expired' 
+                        getTimeRemaining(listing.available_until || '') === 'Unavailable' 
                           ? 'text-red-400' 
                           : 'text-green-400'
                       }`}>
@@ -243,11 +247,6 @@ export default function Browse() {
                         {listing.owner?.organization_name || listing.owner?.name}
                       </span>
                     </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Safety window:</span>
-                      <span className="text-white">{listing.safety_window_hours}h</span>
-                    </div>
                   </div>
 
                   {listing.address && (
@@ -259,11 +258,11 @@ export default function Browse() {
 
                   <button
                     onClick={() => handleClaim(listing.id)}
-                    disabled={claiming === listing.id || !profile || getTimeRemaining(listing.available_until || '') === 'Expired'}
+                    disabled={claiming === listing.id || !profile || getTimeRemaining(listing.available_until || '') === 'Unavailable'}
                     className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white py-2 px-4 rounded-lg font-medium transition-colors"
                   >
                     {claiming === listing.id ? 'Claiming...' : 
-                     getTimeRemaining(listing.available_until || '') === 'Expired' ? 'Expired' :
+                     getTimeRemaining(listing.available_until || '') === 'Unavailable' ? 'Unavailable' :
                      !profile ? 'Complete Profile to Claim' : 'Claim Food'}
                   </button>
                 </div>

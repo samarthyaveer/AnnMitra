@@ -201,13 +201,6 @@ export default function MapView() {
                       </div>
                     )}
                     
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Safe until:</span>
-                      <span className="text-white">
-                        {selectedListing.safety_window_hours}h from pickup
-                      </span>
-                    </div>
-                    
                     {selectedListing.available_until && (
                       <div className="flex justify-between">
                         <span className="text-gray-400">Available until:</span>

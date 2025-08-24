@@ -22,6 +22,11 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        // Run cleanup first to update unavailable listings
+        await fetch('/api/cleanup', { method: 'POST' }).catch(() => {
+          // Silently handle cleanup errors - don't block the dashboard
+        })
+        
         const response = await fetch('/api/users')
         const data = await response.json()
         setProfile(data.user)
@@ -208,9 +213,12 @@ function CanteenDashboard({ listings }: { listings: Listing[] }) {
               <span className={`px-2 py-1 rounded-full text-xs self-start sm:self-auto ${
                 listing.status === 'available' ? 'bg-green-900 text-green-400' :
                 listing.status === 'claimed' ? 'bg-yellow-900 text-yellow-400' :
+                listing.status === 'picked_up' ? 'bg-green-900 text-green-400' :
+                listing.status === 'unavailable' ? 'bg-red-900 text-red-400' :
+                listing.status === 'cancelled' ? 'bg-gray-700 text-gray-400' :
                 'bg-gray-700 text-gray-400'
               }`}>
-                {listing.status}
+                {listing.status === 'unavailable' ? 'unavailable' : listing.status}
               </span>
             </div>
           </div>
@@ -336,7 +344,13 @@ function RecentActivity({ pickups, userRole }: { pickups: Pickup[], userRole: st
                 {new Date(pickup.claimed_at).toLocaleString()}
               </p>
             </div>
-            <span className="text-xs text-gray-400 capitalize flex-shrink-0">
+            <span className={`text-xs capitalize flex-shrink-0 ${
+              pickup.status === 'collected' ? 'text-green-400' :
+              pickup.status === 'confirmed' ? 'text-blue-400' :
+              pickup.status === 'pending' ? 'text-yellow-400' :
+              pickup.status === 'cancelled' ? 'text-red-400' :
+              'text-gray-400'
+            }`}>
               {pickup.status}
             </span>
           </div>

@@ -3,8 +3,37 @@ import { supabase } from '@/lib/supabase'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { NextResponse } from 'next/server'
 
+// Helper function to update unavailable listings
+async function updateUnavailableListings() {
+  try {
+    const now = new Date().toISOString()
+    
+    // Update listings where available_until has passed and status is still 'available'
+    const { data, error } = await supabaseAdmin
+      .from('listings')
+      .update({ 
+        status: 'unavailable',
+        updated_at: now
+      })
+      .lt('available_until', now)
+      .eq('status', 'available')
+      .select('id')
+
+    if (error) {
+      console.error('Error updating unavailable listings:', error)
+    } else if (data && data.length > 0) {
+      console.log(`Updated ${data.length} unavailable listings`)
+    }
+  } catch (error) {
+    console.error('Error in updateUnavailableListings:', error)
+  }
+}
+
 export async function GET(request: Request) {
   try {
+    // Update unavailable listings before fetching
+    await updateUnavailableListings()
+    
     const { searchParams } = new URL(request.url)
     const status = searchParams.get('status') || 'available'
     const food_type = searchParams.get('food_type')
@@ -108,6 +137,7 @@ export async function POST(request: Request) {
       quantity,
       quantity_unit,
       safety_window_hours,
+      safety_window_days,
       available_until,
       pickup_location_lat,
       pickup_location_lng,
@@ -120,6 +150,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    // Calculate total safety window hours for storage
+    const totalSafetyWindowHours = (parseInt(safety_window_days) || 0) * 24 + (parseInt(safety_window_hours) || 0)
+
     const { data: listing, error } = await supabase
       .from('listings')
       .insert({
@@ -129,7 +162,7 @@ export async function POST(request: Request) {
         food_type,
         quantity,
         quantity_unit: quantity_unit || 'meals',
-        safety_window_hours: safety_window_hours || 4,
+        safety_window_hours: totalSafetyWindowHours,
         available_until,
         pickup_location_lat,
         pickup_location_lng,
