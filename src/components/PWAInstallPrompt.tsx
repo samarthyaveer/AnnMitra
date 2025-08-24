@@ -168,11 +168,11 @@ export default function PWAInstallPrompt() {
 // iOS Install Instructions Component (optional)
 export function IOSInstallInstructions({ onClose }: { onClose: () => void }) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg max-w-sm w-full p-6">
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+      <div className="glass-nav max-w-sm w-full p-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium">Install AnnMitra</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <h3 className="text-lg font-medium text-white">Install AnnMitra</h3>
+          <button onClick={onClose} className="text-gray-400 hover:text-white">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -180,36 +180,36 @@ export function IOSInstallInstructions({ onClose }: { onClose: () => void }) {
         </div>
         <div className="space-y-4 text-sm">
           <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-medium">1</span>
+            <div className="flex-shrink-0 w-8 h-8 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center">
+              <span className="text-green-400 font-medium">1</span>
             </div>
             <div>
-              <p>Tap the <strong>Share</strong> button in Safari</p>
-              <p className="text-gray-600">Look for the share icon in the bottom menu</p>
+              <p className="text-white">Tap the <strong>Share</strong> button in Safari</p>
+              <p className="text-gray-300">Look for the share icon in the bottom menu</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-medium">2</span>
+            <div className="flex-shrink-0 w-8 h-8 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center">
+              <span className="text-green-400 font-medium">2</span>
             </div>
             <div>
-              <p>Select <strong>&quot;Add to Home Screen&quot;</strong></p>
-              <p className="text-gray-600">Scroll down in the share menu to find this option</p>
+              <p className="text-white">Select <strong>&quot;Add to Home Screen&quot;</strong></p>
+              <p className="text-gray-300">Scroll down in the share menu to find this option</p>
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <span className="text-blue-600 font-medium">3</span>
+            <div className="flex-shrink-0 w-8 h-8 bg-green-500/20 border border-green-500/50 rounded-full flex items-center justify-center">
+              <span className="text-green-400 font-medium">3</span>
             </div>
             <div>
-              <p>Tap <strong>&quot;Add&quot;</strong> to confirm</p>
-              <p className="text-gray-600">AnnMitra will appear on your home screen</p>
+              <p className="text-white">Tap <strong>&quot;Add&quot;</strong> to confirm</p>
+              <p className="text-gray-300">AnnMitra will appear on your home screen</p>
             </div>
           </div>
         </div>
         <button
           onClick={onClose}
-          className="w-full mt-6 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors"
+          className="w-full mt-6 btn-primary"
         >
           Got it!
         </button>

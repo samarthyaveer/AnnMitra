@@ -68,19 +68,21 @@ export default function NotificationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <div className="min-h-screen p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Notifications</h1>
-          <p className="text-gray-400">
+        <div className="mb-6 sm:mb-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            Notifications 🔔
+          </h1>
+          <p className="text-lg text-gray-300">
             Stay updated with your food listings, pickups, and account activities
           </p>
         </div>
 
         {/* Actions & Filters */}
-        <div className="bg-gray-800 rounded-lg p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div className="glass-card p-6 mb-6">
+          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center gap-6">
             {/* Filters */}
             <div className="flex flex-wrap gap-2">
               {[
@@ -94,33 +96,39 @@ export default function NotificationsPage() {
                 <button
                   key={key}
                   onClick={() => setFilter(key as any)}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                     filter === key
-                      ? 'bg-green-600 text-white'
-                      : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                      ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                      : 'bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 hover:text-white border border-gray-600'
                   }`}
                 >
-                  {label} {count > 0 && `(${count})`}
+                  {label} {count > 0 && (
+                    <span className={`ml-1 px-2 py-0.5 rounded-full text-xs ${
+                      filter === key ? 'bg-green-400/20' : 'bg-gray-600'
+                    }`}>
+                      {count}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               {unreadCount > 0 && (
                 <button
                   onClick={markAllAsRead}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
+                  className="px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/50 text-blue-400 rounded-xl text-sm font-medium transition-all"
                 >
-                  Mark All Read
+                  ✅ Mark All Read
                 </button>
               )}
               {notifications.length > 0 && (
                 <button
                   onClick={clearAll}
-                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-medium transition-colors"
+                  className="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 border border-red-500/50 text-red-400 rounded-xl text-sm font-medium transition-all"
                 >
-                  Clear All
+                  🗑️ Clear All
                 </button>
               )}
             </div>
@@ -130,12 +138,12 @@ export default function NotificationsPage() {
         {/* Notifications List */}
         <div className="space-y-4">
           {filteredNotifications.length === 0 ? (
-            <div className="bg-gray-800 rounded-lg p-12 text-center">
-              <div className="text-6xl mb-4">🔔</div>
-              <h3 className="text-xl font-semibold text-white mb-2">
+            <div className="glass-card p-12 text-center">
+              <div className="text-6xl mb-6">🔔</div>
+              <h3 className="text-2xl font-semibold text-white mb-4">
                 {filter === 'all' ? 'No notifications yet' : `No ${filter} notifications`}
               </h3>
-              <p className="text-gray-400 mb-6">
+              <p className="text-gray-300 mb-6 max-w-md mx-auto">
                 {filter === 'all' 
                   ? "You'll see updates about your listings and pickups here"
                   : `No ${filter} notifications to show`
@@ -144,7 +152,7 @@ export default function NotificationsPage() {
               {filter !== 'all' && (
                 <button
                   onClick={() => setFilter('all')}
-                  className="text-green-400 hover:text-green-300 transition-colors"
+                  className="btn-secondary"
                 >
                   View all notifications
                 </button>
@@ -154,10 +162,10 @@ export default function NotificationsPage() {
             filteredNotifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`bg-gray-800 rounded-lg p-6 border transition-all hover:bg-gray-750 ${
+                className={`glass-card p-6 transition-all cursor-pointer ${
                   !notification.read 
-                    ? 'border-green-600 shadow-lg shadow-green-600/20' 
-                    : 'border-gray-700'
+                    ? 'border-green-400/50 shadow-lg shadow-green-400/10 hover:border-green-400/70' 
+                    : 'hover:border-gray-500/50'
                 }`}
                 onClick={() => handleNotificationClick(notification)}
               >
@@ -170,16 +178,16 @@ export default function NotificationsPage() {
                 )}
                 
                 {/* Action Buttons */}
-                <div className="flex justify-end mt-4 space-x-2">
+                <div className="flex justify-end mt-6 space-x-3">
                   {!notification.read && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
                         markAsRead(notification.id)
                       }}
-                      className="text-sm text-green-400 hover:text-green-300 transition-colors"
+                      className="text-sm text-green-400 hover:text-green-300 transition-colors px-3 py-1 rounded-lg hover:bg-green-500/10"
                     >
-                      Mark as read
+                      ✅ Mark as read
                     </button>
                   )}
                   <button
@@ -187,9 +195,9 @@ export default function NotificationsPage() {
                       e.stopPropagation()
                       removeNotification(notification.id)
                     }}
-                    className="text-sm text-red-400 hover:text-red-300 transition-colors"
+                    className="text-sm text-red-400 hover:text-red-300 transition-colors px-3 py-1 rounded-lg hover:bg-red-500/10"
                   >
-                    Remove
+                    🗑️ Remove
                   </button>
                 </div>
               </div>
@@ -205,35 +213,39 @@ function NotificationCard({ notification }: { notification: any }) {
   return (
     <div className="flex items-start space-x-4">
       {/* Icons */}
-      <div className="flex flex-col items-center space-y-1">
-        <span className="text-2xl">{getCategoryIcon(notification.category)}</span>
-        <span className="text-lg">{getNotificationIcon(notification.type)}</span>
+      <div className="flex flex-col items-center space-y-2 flex-shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-gray-800/50 border border-gray-600 flex items-center justify-center">
+          <span className="text-2xl">{getCategoryIcon(notification.category)}</span>
+        </div>
+        <div className="w-8 h-8 rounded-lg bg-gray-700/50 border border-gray-600 flex items-center justify-center">
+          <span className="text-sm">{getNotificationIcon(notification.type)}</span>
+        </div>
       </div>
 
       {/* Content */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between">
-          <div className="flex-1">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
             <h3 className={`text-lg font-semibold ${!notification.read ? 'text-white' : 'text-gray-300'}`}>
               {notification.title}
             </h3>
-            <p className="text-gray-400 mt-1 leading-relaxed">
+            <p className="text-gray-400 mt-2 leading-relaxed">
               {notification.message}
             </p>
           </div>
           
           {/* Unread Indicator */}
           {!notification.read && (
-            <div className="w-3 h-3 bg-green-500 rounded-full ml-4 flex-shrink-0"></div>
+            <div className="w-3 h-3 bg-green-400 rounded-full shadow-lg shadow-green-400/50 flex-shrink-0"></div>
           )}
         </div>
 
         {/* Metadata */}
-        <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
-          <span className="bg-gray-700 px-2 py-1 rounded capitalize">
+        <div className="flex items-center justify-between mt-4 text-sm">
+          <span className="bg-gray-700/50 border border-gray-600 px-3 py-1 rounded-lg capitalize text-gray-300">
             {notification.category}
           </span>
-          <span>{formatDateTime(notification.timestamp)}</span>
+          <span className="text-gray-400">{formatDateTime(notification.timestamp)}</span>
         </div>
       </div>
     </div>

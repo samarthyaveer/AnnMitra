@@ -65,17 +65,6 @@ export default function Listings() {
     }
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'available': return 'bg-green-900 text-green-400'
-      case 'claimed': return 'bg-yellow-900 text-yellow-400'
-      case 'picked_up': return 'bg-green-900 text-green-400'
-      case 'unavailable': return 'bg-red-900 text-red-400'
-      case 'cancelled': return 'bg-gray-700 text-gray-400'
-      default: return 'bg-gray-700 text-gray-400'
-    }
-  }
-
   const getTimeRemaining = (availableUntil: string) => {
     const now = new Date()
     const until = new Date(availableUntil)
@@ -189,26 +178,33 @@ export default function Listings() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-green-400">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="glass-card p-8 text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="text-green-400 font-medium">Loading...</div>
+        </div>
       </div>
     )
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-green-400">Loading your listings...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="glass-card p-8 text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="text-green-400 font-medium">Loading your listings...</div>
+        </div>
       </div>
     )
   }
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-card p-8 text-center max-w-md">
+          <div className="text-6xl mb-6">👤</div>
           <h1 className="text-2xl font-bold text-white mb-4">Complete Your Profile</h1>
-          <p className="text-gray-400">Please complete your profile to manage listings.</p>
+          <p className="text-gray-300">Please complete your profile to manage listings.</p>
         </div>
       </div>
     )
@@ -216,11 +212,12 @@ export default function Listings() {
 
   if (profile.role !== 'canteen') {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-card p-8 text-center max-w-md">
+          <div className="text-6xl mb-6">🚫</div>
           <h1 className="text-2xl font-bold text-white mb-4">Access Denied</h1>
-          <p className="text-gray-400">Only canteen owners can manage food listings.</p>
-          <Link href="/browse" className="text-green-400 hover:text-green-300 mt-4 inline-block">
+          <p className="text-gray-300 mb-6">Only canteen owners can manage food listings.</p>
+          <Link href="/browse" className="btn-primary">
             Browse Available Food
           </Link>
         </div>
@@ -229,57 +226,59 @@ export default function Listings() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">My Food Listings</h1>
-            <p className="text-gray-400">Manage your food sharing posts</p>
-          </div>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">My Food Listings 📋</h1>
+          <p className="text-lg text-gray-300 mb-6">Manage your food sharing posts and help reduce waste</p>
           <Link 
             href="/listings/create" 
-            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="btn-primary"
           >
             Create New Listing
           </Link>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <h3 className="text-gray-400 text-sm font-medium">Total Listings</h3>
-            <p className="text-2xl font-bold text-white">{listings.length}</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mb-8">
+          <div className="glass-card p-4 sm:p-6 text-center">
+            <div className="text-2xl mb-2">📊</div>
+            <div className="text-xl sm:text-2xl font-bold text-white mb-1">{listings.length}</div>
+            <div className="text-sm text-gray-300">Total Listings</div>
           </div>
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <h3 className="text-gray-400 text-sm font-medium">Available</h3>
-            <p className="text-2xl font-bold text-green-400">
+          <div className="glass-card p-4 sm:p-6 text-center">
+            <div className="text-2xl mb-2">✅</div>
+            <div className="text-xl sm:text-2xl font-bold text-green-400 mb-1">
               {listings.filter(l => l.status === 'available').length}
-            </p>
+            </div>
+            <div className="text-sm text-gray-300">Available</div>
           </div>
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <h3 className="text-gray-400 text-sm font-medium">Claimed</h3>
-            <p className="text-2xl font-bold text-yellow-400">
+          <div className="glass-card p-4 sm:p-6 text-center">
+            <div className="text-2xl mb-2">⏳</div>
+            <div className="text-xl sm:text-2xl font-bold text-yellow-400 mb-1">
               {listings.filter(l => l.status === 'claimed').length}
-            </p>
+            </div>
+            <div className="text-sm text-gray-300">Claimed</div>
           </div>
-          <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-            <h3 className="text-gray-400 text-sm font-medium">Completed</h3>
-            <p className="text-2xl font-bold text-blue-400">
+          <div className="glass-card p-4 sm:p-6 text-center">
+            <div className="text-2xl mb-2">🏆</div>
+            <div className="text-xl sm:text-2xl font-bold text-blue-400 mb-1">
               {listings.filter(l => l.status === 'picked_up').length}
-            </p>
+            </div>
+            <div className="text-sm text-gray-300">Completed</div>
           </div>
         </div>
 
         {/* Listings */}
         {listings.length === 0 ? (
           <div className="text-center py-16">
-            <div className="text-6xl mb-4">🍽️</div>
-            <h2 className="text-2xl font-bold text-white mb-2">No listings yet</h2>
-            <p className="text-gray-400 mb-6">Start sharing surplus food with your community</p>
+            <div className="text-6xl mb-6">🍽️</div>
+            <h2 className="text-2xl font-bold text-white mb-4">No listings yet</h2>
+            <p className="text-gray-300 text-lg mb-6">Start sharing surplus food with your community</p>
             <Link 
               href="/listings/create" 
-              className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+              className="btn-primary"
             >
               Create Your First Listing
             </Link>
@@ -287,19 +286,20 @@ export default function Listings() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {listings.map((listing) => (
-              <div key={listing.id} className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+              <div key={listing.id} className="glass-card overflow-hidden hover:border-green-400/50 transition-all group">
                 {/* Image */}
                 {listing.image_url ? (
-                  <div className="relative h-48 w-full">
+                  <div className="relative h-48 w-full overflow-hidden">
                     <Image
                       src={listing.image_url}
                       alt={listing.title}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                   </div>
                 ) : (
-                  <div className="h-48 bg-gray-700 flex items-center justify-center">
+                  <div className="h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center group-hover:from-gray-700 group-hover:to-gray-800 transition-colors">
                     <span className="text-6xl">🍽️</span>
                   </div>
                 )}
@@ -307,27 +307,34 @@ export default function Listings() {
                 {/* Content */}
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-white">{listing.title}</h3>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(listing.status)}`}>
-                      {listing.status}
+                    <h3 className="text-lg font-semibold text-white group-hover:text-green-400 transition-colors">{listing.title}</h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${
+                      listing.status === 'available' ? 'bg-green-900/50 text-green-400 border-green-500/30' :
+                      listing.status === 'claimed' ? 'bg-yellow-900/50 text-yellow-400 border-yellow-500/30' :
+                      listing.status === 'picked_up' ? 'bg-green-900/50 text-green-400 border-green-500/30' :
+                      listing.status === 'unavailable' ? 'bg-red-900/50 text-red-400 border-red-500/30' :
+                      listing.status === 'cancelled' ? 'bg-gray-700/50 text-gray-400 border-gray-500/30' :
+                      'bg-gray-700/50 text-gray-400 border-gray-500/30'
+                    }`}>
+                      {listing.status === 'unavailable' ? 'unavailable' : listing.status}
                     </span>
                   </div>
 
                   {listing.description && (
-                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                    <p className="text-gray-300 text-sm mb-4 line-clamp-2">
                       {listing.description}
                     </p>
                   )}
 
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Quantity:</span>
-                      <span className="text-white">{listing.quantity} {listing.quantity_unit}</span>
+                  <div className="space-y-3 mb-6">
+                    <div className="flex items-center justify-between text-sm p-3 rounded-lg bg-gray-800/30">
+                      <span className="text-gray-300 font-medium">Quantity:</span>
+                      <span className="text-white font-semibold">{listing.quantity} {listing.quantity_unit}</span>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Available for:</span>
-                      <span className={`font-medium ${
+                    <div className="flex items-center justify-between text-sm p-3 rounded-lg bg-gray-800/30">
+                      <span className="text-gray-300 font-medium">Available for:</span>
+                      <span className={`font-semibold ${
                         getTimeRemaining(listing.available_until || '') === 'Unavailable' 
                           ? 'text-red-400' 
                           : 'text-green-400'
@@ -337,36 +344,36 @@ export default function Listings() {
                     </div>
 
                     {listing.food_type && (
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-400">Type:</span>
-                        <span className="text-white">{listing.food_type.replace('_', ' ')}</span>
+                      <div className="flex items-center justify-between text-sm p-3 rounded-lg bg-gray-800/30">
+                        <span className="text-gray-300 font-medium">Type:</span>
+                        <span className="text-white font-semibold capitalize">{listing.food_type.replace('_', ' ')}</span>
                       </div>
                     )}
 
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-400">Created:</span>
-                      <span className="text-white">{new Date(listing.created_at).toLocaleDateString()}</span>
+                    <div className="flex items-center justify-between text-sm p-3 rounded-lg bg-gray-800/30">
+                      <span className="text-gray-300 font-medium">Created:</span>
+                      <span className="text-white font-semibold">{new Date(listing.created_at).toLocaleDateString()}</span>
                     </div>
                   </div>
 
                   {listing.address && (
-                    <div className="mb-4">
-                      <span className="text-gray-400 text-sm">📍 </span>
-                      <span className="text-gray-300 text-sm">{listing.address}</span>
+                    <div className="mb-4 p-3 rounded-lg bg-blue-900/20 border border-blue-500/30">
+                      <span className="text-blue-400 text-sm">📍 </span>
+                      <span className="text-blue-300 text-sm font-medium">{listing.address}</span>
                     </div>
                   )}
 
                   <div className="flex space-x-2">
                     <button 
                       onClick={() => handleViewDetails(listing)}
-                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded-lg text-sm transition-colors"
+                      className="flex-1 btn-secondary text-center"
                     >
                       View Details
                     </button>
                     {listing.status === 'available' && (
                       <button 
                         onClick={() => handleEdit(listing)}
-                        className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-3 rounded-lg text-sm transition-colors"
+                        className="flex-1 bg-gray-600/50 hover:bg-gray-500/50 text-white py-2 px-3 rounded-lg text-sm transition-all border border-gray-500/30 hover:border-gray-400/50"
                       >
                         Edit
                       </button>
@@ -381,8 +388,8 @@ export default function Listings() {
 
       {/* Details Modal */}
       {showDetailsModal && selectedListing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+          <div className="glass-nav max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
             <div className="p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4 sm:mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-white">Listing Details</h2>
@@ -408,8 +415,15 @@ export default function Listings() {
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg sm:text-xl font-semibold text-white mb-2">{selectedListing.title}</h3>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedListing.status)}`}>
-                    {selectedListing.status}
+                  <span className={`px-3 py-1 rounded-full text-sm font-medium border ${
+                    selectedListing.status === 'available' ? 'bg-green-900/50 text-green-400 border-green-500/30' :
+                    selectedListing.status === 'claimed' ? 'bg-yellow-900/50 text-yellow-400 border-yellow-500/30' :
+                    selectedListing.status === 'picked_up' ? 'bg-green-900/50 text-green-400 border-green-500/30' :
+                    selectedListing.status === 'unavailable' ? 'bg-red-900/50 text-red-400 border-red-500/30' :
+                    selectedListing.status === 'cancelled' ? 'bg-gray-700/50 text-gray-400 border-gray-500/30' :
+                    'bg-gray-700/50 text-gray-400 border-gray-500/30'
+                  }`}>
+                    {selectedListing.status === 'unavailable' ? 'unavailable' : selectedListing.status}
                   </span>
                 </div>
 
@@ -467,27 +481,27 @@ export default function Listings() {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-6">
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 mt-6">
                 {selectedListing.status === 'available' && (
                   <button
                     onClick={() => {
                       setShowDetailsModal(false)
                       handleEdit(selectedListing)
                     }}
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors"
+                    className="flex-1 btn-primary"
                   >
                     Edit Listing
                   </button>
                 )}
                 <button
                   onClick={() => handleDeleteListing(selectedListing.id)}
-                  className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg transition-colors"
+                  className="bg-red-600/80 hover:bg-red-600 text-white py-2 px-4 rounded-xl transition-all border border-red-500/30"
                 >
                   Delete
                 </button>
                 <button
                   onClick={() => setShowDetailsModal(false)}
-                  className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition-colors"
+                  className="btn-secondary"
                 >
                   Close
                 </button>
@@ -499,8 +513,8 @@ export default function Listings() {
 
       {/* Edit Modal */}
       {showEditModal && selectedListing && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-lg border border-gray-700 max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50">
+          <div className="glass-nav max-w-2xl w-full max-h-[90vh] overflow-y-auto mx-4">
             <div className="p-4 sm:p-6">
               <div className="flex items-start justify-between mb-4 sm:mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-white">Edit Listing</h2>
@@ -521,7 +535,7 @@ export default function Listings() {
                     type="text"
                     value={editForm.title || ''}
                     onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                    className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                    className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                     placeholder="e.g., Fresh Sandwiches"
                   />
                 </div>
@@ -534,7 +548,7 @@ export default function Listings() {
                     value={editForm.description || ''}
                     onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                     rows={3}
-                    className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                    className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all resize-none"
                     placeholder="Describe the food..."
                   />
                 </div>
@@ -548,7 +562,7 @@ export default function Listings() {
                       type="number"
                       value={editForm.quantity || ''}
                       onChange={(e) => setEditForm({ ...editForm, quantity: parseInt(e.target.value) })}
-                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                      className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                       placeholder="10"
                     />
                   </div>
@@ -560,7 +574,7 @@ export default function Listings() {
                     <select
                       value={editForm.quantity_unit || 'meals'}
                       onChange={(e) => setEditForm({ ...editForm, quantity_unit: e.target.value })}
-                      className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                      className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                     >
                       <option value="meals">Meals</option>
                       <option value="servings">Servings</option>
@@ -579,7 +593,7 @@ export default function Listings() {
                   <select
                     value={editForm.food_type || ''}
                     onChange={(e) => setEditForm({ ...editForm, food_type: e.target.value })}
-                    className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                    className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                   >
                     <option value="">Select type</option>
                     <option value="meals">Meals</option>
@@ -610,7 +624,7 @@ export default function Listings() {
                           name="safety_window_days"
                           value={editForm.safety_window_days || '0'}
                           onChange={(e) => setEditForm({ ...editForm, safety_window_days: e.target.value })}
-                          className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                          className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                         />
                       </div>
                       <div>
@@ -622,7 +636,7 @@ export default function Listings() {
                           name="safety_window_hours"
                           value={editForm.safety_window_hours || '0'}
                           onChange={(e) => setEditForm({ ...editForm, safety_window_hours: e.target.value })}
-                          className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                          className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                         />
                       </div>
                     </div>
@@ -646,7 +660,7 @@ export default function Listings() {
                     type="text"
                     value={editForm.address || ''}
                     onChange={(e) => setEditForm({ ...editForm, address: e.target.value })}
-                    className="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:border-green-500"
+                    className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                     placeholder="Building, Room, Campus"
                   />
                 </div>
@@ -656,13 +670,13 @@ export default function Listings() {
                 <button
                   onClick={handleUpdateListing}
                   disabled={isUpdating}
-                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg transition-colors"
+                  className="flex-1 btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isUpdating ? 'Updating...' : 'Update Listing'}
                 </button>
                 <button
                   onClick={() => setShowEditModal(false)}
-                  className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg transition-colors"
+                  className="btn-secondary"
                 >
                   Cancel
                 </button>

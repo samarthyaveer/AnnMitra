@@ -94,7 +94,7 @@ export default function NotificationDropdown() {
       {/* Notification Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-400 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-800 rounded-full"
+        className="relative p-3 text-gray-400 hover:text-green-400 hover:bg-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2 focus:ring-offset-transparent rounded-xl border border-gray-600/30 glass"
         aria-label="Notifications"
       >
         <svg
@@ -121,15 +121,15 @@ export default function NotificationDropdown() {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50 max-h-96 overflow-hidden">
+        <div className="absolute right-0 mt-2 w-80 glass-nav border border-gray-600 shadow-xl z-50 max-h-96 overflow-hidden">
           {/* Header */}
-          <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+          <div className="p-4 border-b border-gray-600 flex justify-between items-center">
             <h3 className="text-lg font-semibold text-white">Notifications</h3>
             <div className="flex space-x-2">
               {unreadCount > 0 && (
                 <button
                   onClick={handleMarkAllRead}
-                  className="text-sm text-green-400 hover:text-green-300 transition-colors"
+                  className="text-sm text-green-400 hover:text-green-300 transition-colors font-medium"
                 >
                   Mark all read
                 </button>
@@ -137,7 +137,7 @@ export default function NotificationDropdown() {
               {notifications.length > 0 && (
                 <button
                   onClick={handleClearAll}
-                  className="text-sm text-red-400 hover:text-red-300 transition-colors"
+                  className="text-sm text-red-400 hover:text-red-300 transition-colors font-medium"
                 >
                   Clear all
                 </button>
@@ -156,12 +156,12 @@ export default function NotificationDropdown() {
                 </p>
               </div>
             ) : (
-              <div className="divide-y divide-gray-700">
+              <div className="divide-y divide-gray-600">
                 {notifications.map((notification) => (
                   <div
                     key={notification.id}
-                    className={`p-4 hover:bg-gray-700 transition-colors cursor-pointer ${
-                      !notification.read ? 'bg-gray-750' : ''
+                    className={`p-4 hover:bg-white/5 transition-colors cursor-pointer group ${
+                      !notification.read ? 'bg-green-500/5' : ''
                     }`}
                     onClick={() => handleNotificationClick(notification)}
                   >
@@ -180,7 +180,7 @@ export default function NotificationDropdown() {
 
           {/* Footer */}
           {notifications.length > 0 && (
-            <div className="p-3 border-t border-gray-700 bg-gray-750">
+            <div className="p-3 border-t border-gray-600 bg-gray-800/30">
               <Link
                 href="/notifications"
                 className="block text-center text-sm text-green-400 hover:text-green-300 transition-colors"
@@ -209,7 +209,7 @@ function NotificationContent({ notification }: { notification: any }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between">
           <div className="flex-1">
-            <h4 className={`text-sm font-medium ${!notification.read ? 'text-white' : 'text-gray-300'}`}>
+            <h4 className={`text-sm font-medium group-hover:text-green-400 transition-colors ${!notification.read ? 'text-white' : 'text-gray-300'}`}>
               {notification.title}
             </h4>
             <p className="text-sm text-gray-400 mt-1 line-clamp-2">

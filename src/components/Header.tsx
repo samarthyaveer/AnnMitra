@@ -21,36 +21,43 @@ export default function Header() {
   // Hide header on landing page for signed out users
   const isLandingPage = pathname === '/'
 
+  const navLinkClass = (href: string) => {
+    const isActive = pathname === href
+    return `text-sm font-medium transition-all duration-300 hover:text-white hover:text-shadow ${
+      isActive 
+        ? 'text-white border-b-2 border-green-400 pb-1' 
+        : 'text-gray-300'
+    }`
+  }
+
   return (
     <>
       <SignedOut>
         {!isLandingPage && (
-          <header className="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
-            <div className="container mx-auto px-4 py-4">
+          <header className="glass-nav fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl mx-auto">
+            <div className="px-6 py-4">
               <div className="flex justify-between items-center">
                 {/* Logo */}
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">A</span>
-                  </div>
-                  <Link href="/" className="text-xl font-bold text-white hover:text-green-400 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <div className="logo-icon">A</div>
+                  <Link href="/" className="logo-text">
                     AnnMitra
                   </Link>
                 </div>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden md:flex space-x-6">
-                  <Link href="/browse" className="text-gray-400 hover:text-white transition-colors">
+                <nav className="hidden md:flex space-x-8">
+                  <Link href="/browse" className={navLinkClass('/browse')}>
                     Browse Food
                   </Link>
-                  <Link href="/map" className="text-gray-400 hover:text-white transition-colors">
+                  <Link href="/map" className={navLinkClass('/map')}>
                     Map
                   </Link>
                 </nav>
 
                 {/* Desktop User Actions */}
                 <div className="hidden md:flex items-center space-x-4">
-                  <Link href="/auth/sign-in" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                  <Link href="/auth/sign-in" className="sign-in-btn">
                     Sign In
                   </Link>
                 </div>
@@ -59,7 +66,7 @@ export default function Header() {
                 <div className="md:hidden flex items-center space-x-2">
                   <button
                     onClick={toggleMobileMenu}
-                    className="text-gray-400 hover:text-white focus:outline-none focus:text-white transition-colors"
+                    className="mobile-menu-toggle"
                     aria-label="Toggle mobile menu"
                   >
                     {isMobileMenuOpen ? (
@@ -77,34 +84,30 @@ export default function Header() {
 
               {/* Mobile Navigation Menu */}
               {isMobileMenuOpen && (
-                <div className="md:hidden mt-4 pb-4 border-t border-gray-700">
-                  <nav className="flex flex-col space-y-2 pt-4">
-                    <Link 
-                      href="/browse" 
-                      className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                      onClick={closeMobileMenu}
-                    >
-                      Browse Food
-                    </Link>
-                    
-                    <Link 
-                      href="/map" 
-                      className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                      onClick={closeMobileMenu}
-                    >
-                      Map
-                    </Link>
+                <div className="mobile-nav-menu md:hidden">
+                  <Link 
+                    href="/browse" 
+                    className="mobile-nav-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Browse Food
+                  </Link>
+                  
+                  <Link 
+                    href="/map" 
+                    className="mobile-nav-link"
+                    onClick={closeMobileMenu}
+                  >
+                    Map
+                  </Link>
 
-                    <div className="pt-2 border-t border-gray-700 mt-2">
-                      <Link 
-                        href="/auth/sign-in" 
-                        className="block bg-green-600 hover:bg-green-700 text-white text-center px-4 py-2 rounded-lg transition-colors"
-                        onClick={closeMobileMenu}
-                      >
-                        Sign In
-                      </Link>
-                    </div>
-                  </nav>
+                  <Link 
+                    href="/auth/sign-in" 
+                    className="mobile-nav-link mobile-signin-btn"
+                    onClick={closeMobileMenu}
+                  >
+                    Sign In
+                  </Link>
                 </div>
               )}
             </div>
@@ -113,34 +116,32 @@ export default function Header() {
       </SignedOut>
 
       <SignedIn>
-        <header className="bg-gray-800 border-b border-gray-700 sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4">
+        <header className="glass-nav fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[90%] max-w-6xl mx-auto">
+          <div className="px-6 py-4">
             <div className="flex justify-between items-center">
               {/* Logo */}
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">A</span>
-                </div>
-                <Link href="/" className="text-xl font-bold text-white hover:text-green-400 transition-colors">
+              <div className="flex items-center space-x-3">
+                <div className="logo-icon">A</div>
+                <Link href="/" className="logo-text">
                   AnnMitra
                 </Link>
               </div>
 
               {/* Desktop Navigation */}
               <nav className="hidden md:flex space-x-6">
-                <Link href="/browse" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/browse" className={navLinkClass('/browse')}>
                   Browse Food
                 </Link>
-                <Link href="/dashboard" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/dashboard" className={navLinkClass('/dashboard')}>
                   Dashboard
                 </Link>
-                <Link href="/pickups" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/pickups" className={navLinkClass('/pickups')}>
                   Pickups
                 </Link>
-                <Link href="/listings" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/listings" className={navLinkClass('/listings')}>
                   My Listings
                 </Link>
-                <Link href="/map" className="text-gray-400 hover:text-white transition-colors">
+                <Link href="/map" className={navLinkClass('/map')}>
                   Map
                 </Link>
               </nav>
@@ -151,34 +152,34 @@ export default function Header() {
                 <UserButton 
                   appearance={{
                     elements: {
-                      avatarBox: "w-8 h-8",
-                      userButtonPopoverCard: "bg-gray-800 border border-gray-700",
-                      userButtonPopoverActionButton: "text-white hover:bg-gray-700",
-                      userButtonPopoverActionButtonText: "text-white",
-                      userButtonPopoverFooter: "bg-gray-700",
+                      avatarBox: "w-9 h-9 ring-2 ring-green-400/30 hover:ring-green-400/50 transition-all",
+                      userButtonPopoverCard: "glass border-gray-600 bg-gray-900/90 backdrop-blur-xl",
+                      userButtonPopoverActionButton: "text-white hover:bg-gray-700/50 transition-all",
+                      userButtonPopoverActionButtonText: "text-white font-medium",
+                      userButtonPopoverFooter: "bg-gray-800/50 border-t border-gray-600",
                     }
                   }}
                 />
               </div>
 
               {/* Mobile Menu Button */}
-              <div className="md:hidden flex items-center space-x-2">
+              <div className="md:hidden flex items-center space-x-3">
                 <NotificationDropdown />
                 <UserButton 
                   appearance={{
                     elements: {
-                      avatarBox: "w-8 h-8",
-                      userButtonPopoverCard: "bg-gray-800 border border-gray-700",
-                      userButtonPopoverActionButton: "text-white hover:bg-gray-700",
+                      avatarBox: "w-8 h-8 ring-2 ring-green-400/30",
+                      userButtonPopoverCard: "glass border-gray-600 bg-gray-900/90 backdrop-blur-xl",
+                      userButtonPopoverActionButton: "text-white hover:bg-gray-700/50",
                       userButtonPopoverActionButtonText: "text-white",
-                      userButtonPopoverFooter: "bg-gray-700",
+                      userButtonPopoverFooter: "bg-gray-800/50 border-t border-gray-600",
                     }
                   }}
                 />
                 
                 <button
                   onClick={toggleMobileMenu}
-                  className="text-gray-400 hover:text-white focus:outline-none focus:text-white transition-colors"
+                  className="mobile-menu-toggle"
                   aria-label="Toggle mobile menu"
                 >
                   {isMobileMenuOpen ? (
@@ -196,46 +197,44 @@ export default function Header() {
 
             {/* Mobile Navigation Menu */}
             {isMobileMenuOpen && (
-              <div className="md:hidden mt-4 pb-4 border-t border-gray-700">
-                <nav className="flex flex-col space-y-2 pt-4">
-                  <Link 
-                    href="/browse" 
-                    className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                    onClick={closeMobileMenu}
-                  >
-                    Browse Food
-                  </Link>
-                  
-                  <Link 
-                    href="/dashboard" 
-                    className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                    onClick={closeMobileMenu}
-                  >
-                    Dashboard
-                  </Link>
-                  <Link 
-                    href="/pickups" 
-                    className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                    onClick={closeMobileMenu}
-                  >
-                    Pickups
-                  </Link>
-                  <Link 
-                    href="/listings" 
-                    className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                    onClick={closeMobileMenu}
-                  >
-                    My Listings
-                  </Link>
-                  
-                  <Link 
-                    href="/map" 
-                    className="text-gray-400 hover:text-white transition-colors py-2 px-2 rounded hover:bg-gray-700"
-                    onClick={closeMobileMenu}
-                  >
-                    Map
-                  </Link>
-                </nav>
+              <div className="mobile-nav-menu md:hidden">
+                <Link 
+                  href="/browse" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  Browse Food
+                </Link>
+                
+                <Link 
+                  href="/dashboard" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  Dashboard
+                </Link>
+                <Link 
+                  href="/pickups" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  Pickups
+                </Link>
+                <Link 
+                  href="/listings" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  My Listings
+                </Link>
+                
+                <Link 
+                  href="/map" 
+                  className="mobile-nav-link"
+                  onClick={closeMobileMenu}
+                >
+                  Map
+                </Link>
               </div>
             )}
           </div>

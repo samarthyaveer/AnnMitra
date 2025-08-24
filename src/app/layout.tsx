@@ -90,16 +90,23 @@ export default function RootLayout({
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         </head>
-        <body className={`${inter.variable} bg-background text-foreground antialiased`}>
+        <body className={`${inter.variable} antialiased`}>
           <OfflineIndicator />
           <NotificationProvider>
+            {/* Animated background elements */}
+            <div className="bg-decoration">
+              <div className="bg-circle"></div>
+              <div className="bg-circle"></div>
+              <div className="bg-circle"></div>
+            </div>
+            
             <div className="min-h-screen flex flex-col">
               <Header />
-              <main className="flex-1">
+              <main className="flex-1 pt-24">
                 {children}
               </main>
-              <footer className="bg-card border-t border-border py-8">
-                <div className="container mx-auto px-4 text-center text-muted-foreground">
+              <footer className="glass mx-4 mb-4 rounded-2xl border border-gray-700">
+                <div className="container mx-auto px-6 py-6 text-center text-gray-300">
                   <p>&copy; 2025 AnnMitra. Reducing food waste, one meal at a time.</p>
                 </div>
               </footer>

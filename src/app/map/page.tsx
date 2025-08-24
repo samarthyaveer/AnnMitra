@@ -108,8 +108,11 @@ export default function MapView() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-green-400">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-card p-8 text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="text-green-400 font-medium">Loading map...</div>
+        </div>
       </div>
     )
   }
@@ -122,89 +125,104 @@ export default function MapView() {
   }))
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700 p-4 sm:p-6">
-        <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Food Map</h1>
-          <p className="text-sm sm:text-base text-gray-400">
-            Discover available food near you • {listings.length} locations found
+    <div className="min-h-screen p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-6 sm:mb-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            Food Map 🗺️
+          </h1>
+          <p className="text-lg text-gray-300">
+            Discover available food near you • <span className="text-green-400">{listings.length}</span> locations found
           </p>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {loading ? (
-          <div className="flex items-center justify-center h-64 sm:h-96">
-            <div className="text-green-400">Loading food locations...</div>
+          <div className="flex items-center justify-center h-96">
+            <div className="glass-card p-8 text-center">
+              <div className="animate-spin w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <div className="text-green-400 font-medium">Loading food locations...</div>
+            </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             {/* Map */}
-            <div className="lg:col-span-2 order-2 lg:order-1">
-              <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
-                <div className="p-3 sm:p-4 border-b border-gray-700">
-                  <h2 className="text-base sm:text-lg font-semibold text-white flex items-center gap-2">
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-                    </svg>
+            <div className="xl:col-span-2 order-2 xl:order-1">
+              <div className="glass-card p-0 overflow-hidden">
+                <div className="p-4 sm:p-6 border-b border-gray-600">
+                  <h2 className="text-xl font-semibold text-white flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-green-500/20 border border-green-500/50 flex items-center justify-center">
+                      <svg className="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
                     Available Food Locations
                   </h2>
-                  <p className="text-xs sm:text-sm text-gray-400 mt-1">
-                    Click on markers to view details
+                  <p className="text-gray-300 mt-2">
+                    Click on markers to view details and claim food
                   </p>
                 </div>
                 
-                <MapComponent
-                  center={mapCenter}
-                  zoom={12}
-                  onMapClick={handleMapClick}
-                  markers={mapMarkers}
-                  className="h-64 sm:h-80 lg:h-96 w-full"
-                />
+                <div className="h-96 lg:h-[500px]">
+                  <MapComponent
+                    center={mapCenter}
+                    zoom={12}
+                    onMapClick={handleMapClick}
+                    markers={mapMarkers}
+                    className="h-full w-full"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Listing Details */}
-            <div className="space-y-4 order-1 lg:order-2">
+            {/* Listing Details & List */}
+            <div className="space-y-6 order-1 xl:order-2">
+              {/* Selected Listing Details */}
               {selectedListing ? (
-                <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 sm:p-6">
-                  <h3 className="text-lg sm:text-xl font-semibold text-white mb-4">
+                <div className="glass-card p-6">
+                  <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                    <span>🍽️</span>
                     {selectedListing.title}
                   </h3>
                   
                   {selectedListing.image_url && (
-                    <div className="relative w-full h-24 sm:h-32 mb-4">
+                    <div className="relative w-full h-32 mb-4 rounded-xl overflow-hidden border border-gray-600">
                       <Image 
                         src={selectedListing.image_url} 
                         alt={selectedListing.title}
                         fill
-                        className="object-cover rounded-lg"
+                        className="object-cover"
                       />
                     </div>
                   )}
                   
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Quantity:</span>
-                      <span className="text-white">
+                  <div className="space-y-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-300 flex items-center gap-2">
+                        <span>📊</span> Quantity:
+                      </span>
+                      <span className="text-white font-medium">
                         {selectedListing.quantity} {selectedListing.quantity_unit}
                       </span>
                     </div>
                     
                     {selectedListing.food_type && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Type:</span>
-                        <span className="text-white capitalize">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300 flex items-center gap-2">
+                          <span>🍽️</span> Type:
+                        </span>
+                        <span className="text-white font-medium capitalize">
                           {selectedListing.food_type.replace('_', ' ')}
                         </span>
                       </div>
                     )}
                     
                     {selectedListing.available_until && (
-                      <div className="flex justify-between">
-                        <span className="text-gray-400">Available until:</span>
-                        <span className="text-white text-xs sm:text-sm">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-300 flex items-center gap-2">
+                          <span>⏰</span> Available until:
+                        </span>
+                        <span className="text-white font-medium text-xs">
                           {new Date(selectedListing.available_until).toLocaleString()}
                         </span>
                       </div>
@@ -213,67 +231,80 @@ export default function MapView() {
                   
                   {selectedListing.description && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Description</h4>
-                      <p className="text-gray-400 text-sm">{selectedListing.description}</p>
+                      <h4 className="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <span>📝</span> Description
+                      </h4>
+                      <p className="text-gray-400 text-sm bg-gray-800/30 p-3 rounded-lg border border-gray-600">
+                        {selectedListing.description}
+                      </p>
                     </div>
                   )}
                   
                   {selectedListing.address && (
                     <div className="mt-4">
-                      <h4 className="text-sm font-medium text-gray-300 mb-2">Pickup Location</h4>
-                      <p className="text-gray-400 text-sm">{selectedListing.address}</p>
+                      <h4 className="text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
+                        <span>📍</span> Pickup Location
+                      </h4>
+                      <p className="text-gray-400 text-sm bg-gray-800/30 p-3 rounded-lg border border-gray-600">
+                        {selectedListing.address}
+                      </p>
                     </div>
                   )}
                   
                   <div className="mt-6">
                     <button
                       onClick={() => claimListing(selectedListing.id)}
-                      className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors"
+                      className="btn-primary w-full py-3 text-base font-semibold"
                     >
-                      Claim This Food
+                      🎯 Claim This Food
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="bg-gray-800 rounded-lg border border-gray-700 p-4 sm:p-6 text-center">
-                  <div className="text-gray-400 mb-4">
-                    <svg className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                <div className="glass-card p-8 text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gray-800/50 border border-gray-600 flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <h3 className="text-base sm:text-lg font-medium text-white mb-2">
+                  <h3 className="text-lg font-medium text-white mb-2">
                     Select a Location
                   </h3>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-300 text-sm">
                     Click on a marker on the map to view food details and claim it
                   </p>
                 </div>
               )}
 
               {/* Listings List */}
-              <div className="bg-gray-800 rounded-lg border border-gray-700">
-                <div className="p-3 sm:p-4 border-b border-gray-700">
-                  <h3 className="text-base sm:text-lg font-semibold text-white">All Available Food</h3>
+              <div className="glass-card">
+                <div className="p-4 border-b border-gray-600">
+                  <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <span>📋</span> All Available Food
+                  </h3>
                 </div>
                 
-                <div className="max-h-64 sm:max-h-96 overflow-y-auto">
+                <div className="max-h-96 overflow-y-auto">
                   {listings.length === 0 ? (
-                    <div className="p-4 text-center text-gray-400 text-sm">
-                      No food available with GPS coordinates
+                    <div className="p-8 text-center">
+                      <div className="text-4xl mb-4">📍</div>
+                      <p className="text-gray-300 text-sm">
+                        No food available with GPS coordinates
+                      </p>
                     </div>
                   ) : (
-                    <div className="divide-y divide-gray-700">
+                    <div className="divide-y divide-gray-600">
                       {listings.map((listing) => (
                         <div 
                           key={listing.id}
-                          className="p-3 sm:p-4 hover:bg-gray-700 cursor-pointer transition-colors"
+                          className="p-4 hover:bg-white/5 cursor-pointer transition-all group"
                           onClick={() => setSelectedListing(listing)}
                         >
-                          <h4 className="font-medium text-white text-sm sm:text-base">{listing.title}</h4>
-                          <p className="text-xs sm:text-sm text-gray-400">
-                            {listing.quantity} {listing.quantity_unit}
+                          <h4 className="font-medium text-white group-hover:text-green-400 transition-colors text-sm mb-1">{listing.title}</h4>
+                          <p className="text-xs text-gray-300">
+                            📊 {listing.quantity} {listing.quantity_unit}
                             {listing.owner?.organization_name && (
-                              <span> • {listing.owner.organization_name}</span>
+                              <span className="text-gray-400"> • 🏪 {listing.owner.organization_name}</span>
                             )}
                           </p>
                         </div>

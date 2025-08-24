@@ -99,89 +99,129 @@ export default function ProfilePage() {
 
   if (!isLoaded || loading) {
     return (
-      <div className="container mx-auto px-4 py-16">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">Loading profile...</p>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="glass-card p-8 text-center">
+          <div className="animate-spin w-8 h-8 border-4 border-green-400 border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="text-green-400 font-medium">Loading profile...</div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 py-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-            {profile ? 'Edit Profile' : 'Complete Your Profile'}
+    <div className="min-h-screen p-4 sm:p-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-6 sm:mb-8 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            {profile ? 'Edit Profile 👤' : 'Complete Your Profile 🚀'}
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground">
+          <p className="text-lg text-gray-300">
             {profile 
-              ? 'Update your profile information' 
+              ? 'Update your profile information to keep your account current' 
               : 'Tell us about yourself to get started with AnnMitra'
             }
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+        <div className="glass-card p-6 sm:p-8">
+          <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+            {/* Basic Information */}
             <div>
-              <label className="block text-sm font-medium mb-2">Full Name</label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
-                required
-              />
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <span>📝</span> Basic Information
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                    className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
+                    placeholder="Enter your full name"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                    className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
+                    placeholder="Enter your email address"
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
+            {/* Role Selection */}
             <div>
-              <label className="block text-sm font-medium mb-2">Email</label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
-                required
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-2">Role</label>
-            <select
-              value={formData.role}
-              onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as 'student' | 'canteen' | 'ngo' }))}
-              className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
-              disabled={!!profile} // Can't change role after creation
-            >
-              <option value="student">🎓 Student</option>
-              <option value="canteen">🏢 Canteen/Restaurant Owner</option>
-              <option value="ngo">🤝 NGO/Organization</option>
-            </select>
-            {profile && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Role cannot be changed after account creation
-              </p>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-            <div>
-              <label className="block text-sm font-medium mb-2">Phone (Optional)</label>
-              <input
-                type="tel"
-                value={formData.phone}
-                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
-              />
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <span>🎯</span> Role
+              </h2>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">What describes you best?</label>
+                <select
+                  value={formData.role}
+                  onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as 'student' | 'canteen' | 'ngo' }))}
+                  className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
+                  disabled={!!profile}
+                >
+                  <option value="student">🎓 Student</option>
+                  <option value="canteen">🏢 Canteen/Restaurant Owner</option>
+                  <option value="ngo">🤝 NGO/Organization</option>
+                </select>
+                {profile && (
+                  <p className="text-xs text-yellow-400 mt-2 p-2 bg-yellow-900/20 rounded-lg border border-yellow-500/30">
+                    ⚠️ Role cannot be changed after account creation
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="md:col-span-1">
-              {/* Campus Location with GPS */}
-              <div className="space-y-4">
-                <h3 className="text-base sm:text-lg font-medium text-foreground">Campus Location</h3>
+            {/* Contact & Organization */}
+            <div>
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <span>📞</span> Contact & Organization
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Phone (Optional)</label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                    className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
+                    placeholder="Enter your phone number"
+                  />
+                </div>
+
+                {(formData.role === 'canteen' || formData.role === 'ngo') && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      {formData.role === 'canteen' ? 'Restaurant/Canteen Name' : 'Organization Name'}
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.organization_name}
+                      onChange={(e) => setFormData(prev => ({ ...prev, organization_name: e.target.value }))}
+                      placeholder={formData.role === 'canteen' ? 'e.g., Campus Café' : 'e.g., Local Food Bank'}
+                      className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Location */}
+            <div>
+              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+                <span>📍</span> Campus Location
+              </h2>
+              <div className="glass border border-gray-600 rounded-xl p-6">
                 <LocationPicker
                   onLocationChange={handleLocationChange}
                   initialLat={formData.campus_location_lat || undefined}
@@ -190,42 +230,35 @@ export default function ProfilePage() {
                 />
               </div>
             </div>
-          </div>
 
-          {(formData.role === 'canteen' || formData.role === 'ngo') && (
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                {formData.role === 'canteen' ? 'Restaurant/Canteen Name' : 'Organization Name'}
-              </label>
-              <input
-                type="text"
-                value={formData.organization_name}
-                onChange={(e) => setFormData(prev => ({ ...prev, organization_name: e.target.value }))}
-                placeholder={formData.role === 'canteen' ? 'e.g., Campus Café' : 'e.g., Local Food Bank'}
-                className="w-full bg-input border border-border rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base text-foreground focus:ring-2 focus:ring-ring focus:border-transparent"
-              />
-            </div>
-          )}
-
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <button
-              type="submit"
-              disabled={saving}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 sm:px-8 py-3 rounded-lg text-sm sm:text-base transition-colors disabled:opacity-50"
-            >
-              {saving ? 'Saving...' : (profile ? 'Update Profile' : 'Create Profile')}
-            </button>
-            
-            {profile && (
-              <a
-                href="/dashboard"
-                className="border border-border hover:bg-muted text-foreground px-6 sm:px-8 py-3 rounded-lg text-sm sm:text-base text-center transition-colors"
+            {/* Submit Buttons */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+              <button
+                type="submit"
+                disabled={saving}
+                className="btn-primary flex-1 sm:flex-none min-w-48 py-3 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Cancel
-              </a>
-            )}
-          </div>
-        </form>
+                {saving ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                    Saving...
+                  </span>
+                ) : (
+                  profile ? '✅ Update Profile' : '🚀 Create Profile'
+                )}
+              </button>
+              
+              {profile && (
+                <a
+                  href="/dashboard"
+                  className="btn-secondary flex-1 sm:flex-none min-w-48 py-3 text-base font-semibold text-center"
+                >
+                  ❌ Cancel
+                </a>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )

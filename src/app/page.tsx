@@ -71,14 +71,6 @@ export default function Home() {
     <>
       {/* Show custom landing page only for signed out users */}
       <SignedOut>
-        <div className="landing-page">
-          {/* Animated background elements */}
-          <div className="bg-decoration">
-            <div className="bg-circle"></div>
-            <div className="bg-circle"></div>
-            <div className="bg-circle"></div>
-          </div>
-
           {/* Landing Navigation */}
           <nav className="glass landing-nav">
             <div className="nav-content">
@@ -204,7 +196,6 @@ export default function Home() {
               </div>
             </div>
           </section>
-        </div>
       </SignedOut>
 
       {/* Show simple dashboard for signed in users */}

@@ -180,14 +180,14 @@ export default function CreateListing() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen p-4 pt-20">
       <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
+        <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-white mb-2">Create Food Listing</h1>
           <p className="text-gray-400">Share surplus food with your community</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-gray-800 rounded-lg border border-gray-700 p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="bg-gray-800/30 backdrop-blur-md border border-gray-700/50 rounded-2xl p-6 space-y-6">
           {/* Basic Information */}
           <div className="space-y-4">
             <h2 className="text-xl font-semibold text-white">Basic Information</h2>
@@ -202,7 +202,7 @@ export default function CreateListing() {
                 value={formData.title}
                 onChange={handleInputChange}
                 placeholder="e.g., Fresh Sandwiches, Leftover Pizza"
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
+                className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                 required
               />
             </div>
@@ -217,7 +217,7 @@ export default function CreateListing() {
                 onChange={handleInputChange}
                 placeholder="Describe the food, ingredients, preparation time..."
                 rows={3}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
+                className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all resize-none"
               />
             </div>
 
@@ -230,7 +230,7 @@ export default function CreateListing() {
                   name="food_type"
                   value={formData.food_type}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                 >
                   <option value="">Select type</option>
                   <option value="meals">Prepared Meals</option>
@@ -261,7 +261,7 @@ export default function CreateListing() {
                     name="safety_window_days"
                     value={formData.safety_window_days}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-green-500"
+                    className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                   >
                     <option value="0">0 days</option>
                     <option value="1">1 day</option>
@@ -281,7 +281,7 @@ export default function CreateListing() {
                     name="safety_window_hours"
                     value={formData.safety_window_hours}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-green-500"
+                    className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                   >
                     <option value="0">0 hours</option>
                     <option value="1">1 hour</option>
@@ -298,7 +298,7 @@ export default function CreateListing() {
                 </div>
               </div>
               {/* Show calculated available until time */}
-              <div className="mt-3 p-3 bg-gray-700/50 rounded-lg border border-gray-600">
+              <div className="mt-3 p-4 bg-green-600/10 backdrop-blur-sm rounded-xl border border-green-500/30">
                 <p className="text-sm text-gray-300">
                   <span className="font-medium">Food will be available until:</span>{' '}
                   <span className="text-green-400">
@@ -342,7 +342,7 @@ export default function CreateListing() {
                   min="1"
                   step="0.1"
                   placeholder="e.g., 10"
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                   required
                 />
               </div>
@@ -355,7 +355,7 @@ export default function CreateListing() {
                   name="quantity_unit"
                   value={formData.quantity_unit}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-green-500"
+                  className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all"
                 >
                   <option value="meals">meals</option>
                   <option value="portions">portions</option>
@@ -390,7 +390,7 @@ export default function CreateListing() {
                 onChange={handleInputChange}
                 placeholder="Building name, room number, specific pickup instructions..."
                 rows={2}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-green-500"
+                className="w-full px-4 py-3 bg-gray-700/50 backdrop-blur-sm border border-gray-600/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-500/20 transition-all resize-none"
               />
               <p className="text-sm text-gray-400 mt-1">
                 This will be shown to people picking up the food
@@ -414,7 +414,7 @@ export default function CreateListing() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-green-500 transition-colors"
+                className="w-full border-2 border-dashed border-gray-600/50 rounded-xl p-6 text-center hover:border-green-500 hover:bg-gray-700/20 transition-all duration-300"
               >
                 {imagePreview ? (
                   <div className="space-y-4">
@@ -443,7 +443,7 @@ export default function CreateListing() {
             <button
               type="submit"
               disabled={creating || uploading}
-              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white py-3 px-6 rounded-lg font-medium transition-colors"
+              className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white py-4 px-6 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform"
             >
               {creating ? 'Creating Listing...' : uploading ? 'Uploading Image...' : 'Create Listing'}
             </button>
