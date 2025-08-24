@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import AnalyticsCharts from './AnalyticsCharts'
 
 interface PublicStatsData {
-  totalMeals: number
   totalUsers: number
   campusPartners: number
   successfulPickups: number
@@ -18,7 +17,6 @@ interface PublicStatsData {
 
 export default function PublicStats() {
   const [stats, setStats] = useState<PublicStatsData>({
-    totalMeals: 0,
     totalUsers: 0,
     campusPartners: 0,
     successfulPickups: 0
@@ -32,7 +30,6 @@ export default function PublicStats() {
         if (response.ok) {
           const data = await response.json()
           setStats({
-            totalMeals: data.totalMeals || data.total_listings || 2500,
             totalUsers: data.totalUsers || data.active_users || 1200,
             campusPartners: data.campusPartners || 50,
             successfulPickups: data.successfulPickups || data.total_pickups || 2100,
@@ -43,7 +40,6 @@ export default function PublicStats() {
         console.error('Error fetching public stats:', error)
         // Use fallback static values
         setStats({
-          totalMeals: 2500,
           totalUsers: 1200,
           campusPartners: 50,
           successfulPickups: 2100
@@ -68,12 +64,6 @@ export default function PublicStats() {
 
   const statsCards = [
     {
-      icon: '🍽️',
-      value: formatNumber(stats.totalMeals),
-      label: 'Meals Saved',
-      suffix: stats.totalMeals >= 1000 ? '+' : ''
-    },
-    {
       icon: '👥',
       value: formatNumber(stats.totalUsers),
       label: 'Active Users',
@@ -82,7 +72,7 @@ export default function PublicStats() {
     {
       icon: '🏢',
       value: stats.campusPartners,
-      label: 'Campus Partners',
+      label: 'Canteens',
       suffix: '+'
     },
     {
@@ -98,7 +88,7 @@ export default function PublicStats() {
       <section className="analytics-section">
         <div className="analytics-container glass">
           <div className="analytics-grid">
-            {[1, 2, 3, 4].map((i) => (
+            {[1, 2, 3].map((i) => (
               <div key={i} className="analytics-card loading">
                 <div className="analytics-icon">⏳</div>
                 <div className="analytics-number">--</div>
