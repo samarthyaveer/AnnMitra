@@ -77,7 +77,27 @@ AnnMitra is a modern, full-stack web application that connects surplus food from
 - **Deployment**: Vercel-optimized
 - **Environment**: Cross-platform (.env configuration)
 
-## 🚀 Quick Start
+## � Use Cases
+
+### For Students
+- **Discover surplus food** from campus canteens at discounted prices
+- **Share extra food** from meal plans or events
+- **Connect with peers** through food sharing
+- **Track environmental impact** of waste reduction
+
+### For Campus Partners (Canteens)
+- **Analyze food waste patterns** with CSV upload
+- **Get AI-powered recommendations** for waste reduction
+- **Reach students directly** with surplus notifications
+- **Track operational efficiency** with analytics
+
+### For NGOs
+- **Access surplus food** for community programs
+- **Coordinate pickups** with automated notifications
+- **Scale impact** through campus partnerships
+- **Monitor food rescue metrics**
+
+## �🚀 Quick Start
 
 ### Prerequisites
 
@@ -245,49 +265,6 @@ AnnMitra/
 - **Mobile Optimization**: Touch-friendly interfaces
 - **Cross-Platform**: Works on all devices and browsers
 
-## � Deployment Guide
-
-### Vercel (Recommended)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/samarthyaveer/AnnMitra)
-
-1. **Connect Repository**: Link your GitHub repository
-2. **Configure Environment Variables**: Add all variables from `.env.example`
-3. **Deploy**: Automatic deployments on every push to main
-
-### Other Platforms
-
-#### Netlify
-```bash
-npm run build
-# Deploy dist folder
-```
-
-#### Railway
-```bash
-# Connect GitHub repository
-# Set environment variables
-# Deploy automatically
-```
-
-### Environment Variables Checklist
-
-**Required for Production:**
-- [ ] `CLERK_SECRET_KEY` & `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
-- [ ] `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- [ ] `SUPABASE_SERVICE_ROLE_KEY`
-- [ ] `FIREBASE_PROJECT_ID` & `FIREBASE_PRIVATE_KEY`
-- [ ] `NEXT_PUBLIC_FIREBASE_VAPID_KEY`
-- [ ] `NEXT_PUBLIC_APP_URL` (your production domain)
-
-### Performance Optimizations
-
-- ✅ **Image Optimization**: Next.js automatic optimization
-- ✅ **Code Splitting**: Automatic route-based splitting  
-- ✅ **Caching**: Service worker + API caching
-- ✅ **Bundle Analysis**: Built-in Webpack analyzer
-- ✅ **SEO**: Optimized meta tags and structured data
-
 ## � Development
 
 ### Available Scripts
@@ -355,35 +332,6 @@ We welcome contributions! Here's how to get started:
 - **Commits**: Use conventional commit messages
 - **Testing**: Add tests for new functionality
 - **Documentation**: Update README and inline comments
-
-## � Roadmap
-
-### Phase 1: Core Features ✅
-- [x] Authentication system
-- [x] Food listing CRUD
-- [x] Interactive maps
-- [x] Real-time notifications
-- [x] PWA support
-
-### Phase 2: Analytics & Intelligence ✅
-- [x] Public analytics dashboard
-- [x] Partner surplus analysis
-- [x] CSV data processing
-- [x] AI-powered recommendations
-
-### Phase 3: Enhanced UX ✅
-- [x] Glass morphism design system
-- [x] Mobile-optimized UI
-- [x] Smart notification positioning
-- [x] Location intelligence
-
-### Phase 4: Future Enhancements 🚧
-- [ ] Multi-language support (i18n)
-- [ ] Advanced filtering & search
-- [ ] Email notification fallbacks
-- [ ] Mobile app (React Native)
-- [ ] Integration with campus meal plans
-- [ ] Carbon footprint tracking
 
 ## 💡 Use Cases
 
