@@ -1,200 +1,470 @@
 # 🍽️ AnnMitra - Campus Food Sharing Platform
 
-AnnMitra is a modern, full-stack web application for sharing food within campus communities. Built with Next.js 15, it enables students and faculty to share surplus food, reducing waste while building community connections.
+> **Reduce Food Waste, Feed Your Community**
 
-## ✨ Features
+AnnMitra is a modern, full-stack web application that connects surplus food from campus canteens with students and NGOs. Built with Next.js 15, it transforms food waste into community meals while creating positive environmental impact.
 
-- 🔐 **Secure Authentication** - Powered by Clerk
-- 🗺️ **Interactive Maps** - Location-based food sharing with Leaflet
-- � **Real-time Notifications** - Firebase Cloud Messaging for instant updates
-- 🎯 **Location Picker** - Precise food pickup locations
-- � **Role-based Dashboards** - Different views for students, faculty, and staff
-- � **Row-level Security** - Secure data access with Supabase RLS
-- � **Mobile Responsive** - Works perfectly on all devices
-- 🚀 **Production Ready** - Optimized for deployment
+![AnnMitra Landing Page](./public/screenshot.png)
+
+## ✨ Key Features
+
+### 🔐 **Complete Authentication System**
+- Secure user authentication powered by Clerk
+- Role-based access (Students, Faculty, Staff, NGOs)
+- Profile management with campus affiliation
+
+### 🗺️ **Interactive Food Discovery** 
+- Real-time map view with food locations
+- Location-based filtering and search
+- Precise pickup location coordinates
+
+### 📱 **Smart Notifications**
+- Real-time push notifications via Firebase FCM
+- In-app notification center with backdrop blur
+- Mobile-optimized notification dropdowns
+
+### 📊 **Advanced Analytics**
+- Public impact statistics
+- Surplus analysis for campus partners
+- CSV data upload and AI-driven insights
+- Interactive charts and visualizations
+
+### 🎯 **Intelligent Food Listing**
+- Safety window calculations (auto-expiry)
+- Status management (Available/Unavailable)
+- Image uploads with automatic optimization
+- Dietary tags and allergen information
+
+### 🌐 **Progressive Web App (PWA)**
+- Offline support and service workers
+- Install prompt for mobile devices
+- Native app-like experience
+
+### 🎨 **Professional UI/UX**
+- Glass morphism design system
+- Dark theme with backdrop blur effects
+- Fully responsive across all devices
+- Industry-standard visual hierarchy
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15, React 19, TypeScript, Tailwind CSS v4
-- **Authentication**: Clerk
-- **Database**: Supabase (PostgreSQL)
-- **Storage**: Supabase Storage
+### Frontend
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript 5+
+- **Styling**: Tailwind CSS v4 with glass morphism
+- **UI Components**: Custom component library
+- **Charts**: Chart.js + Recharts for analytics
+
+### Backend & Database
+- **Database**: Supabase (PostgreSQL) with Row-Level Security
+- **Authentication**: Clerk with role-based access
+- **Storage**: Supabase Storage for image uploads
+- **Real-time**: Supabase Realtime subscriptions
+
+### Maps & Location
 - **Maps**: Leaflet + React-Leaflet
-- **Push Notifications**: Firebase Cloud Messaging
-- **Real-time**: Supabase Realtime
+- **Geocoding**: OpenStreetMap Nominatim API
+- **Location Services**: Browser Geolocation API
+
+### Notifications & PWA
+- **Push Notifications**: Firebase Cloud Messaging (FCM)
+- **Service Worker**: Custom PWA implementation
+- **Offline Support**: Next.js offline capabilities
+
+### Development & Deployment
+- **Package Manager**: npm
+- **Linting**: ESLint with TypeScript rules
+- **Deployment**: Vercel-optimized
+- **Environment**: Cross-platform (.env configuration)
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm or yarn
-- Accounts on: [Clerk](https://clerk.com), [Supabase](https://supabase.com), [Firebase](https://firebase.google.com)
+- Node.js 18.17+ or 20.0+
+- npm 9+ (or yarn/pnpm)
+- Modern web browser with JavaScript enabled
+- Accounts: [Clerk](https://clerk.com), [Supabase](https://supabase.com), [Firebase](https://firebase.google.com)
 
-### 1. Clone the Repository
-
-```bash
-git clone <your-repo-url>
-cd annmitra
-```
-
-### 2. Install Dependencies
+### 1. Clone & Install
 
 ```bash
+git clone https://github.com/samarthyaveer/AnnMitra.git
+cd AnnMitra
 npm install
 ```
 
-### 3. Set Up Environment Variables
-
-Copy the example environment file:
+### 2. Environment Configuration
 
 ```bash
 cp .env.example .env.local
 ```
 
-Edit `.env.local` with your actual values:
+Edit `.env.local` with your service credentials:
 
 ```bash
-# Clerk Authentication Keys
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key_here
-CLERK_SECRET_KEY=your_clerk_secret_key_here
-
-# Clerk URLs
+# Clerk Authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_key
+CLERK_SECRET_KEY=sk_test_your_key
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/auth/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/auth/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
 
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url_here
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key_here
+# Supabase Database & Storage
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIs...
 
-# Firebase Configuration (for push notifications)
-NEXT_PUBLIC_FIREBASE_VAPID_KEY=your_firebase_vapid_key_here
+# Firebase Push Notifications
+NEXT_PUBLIC_FIREBASE_VAPID_KEY=BF9xQ8wP...
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk@your-project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY_ID=your-key-id
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
-# Firebase Admin SDK Configuration
-FIREBASE_PROJECT_ID=your_firebase_project_id_here
-FIREBASE_CLIENT_EMAIL=your_firebase_client_email_here
-FIREBASE_PRIVATE_KEY_ID=your_firebase_private_key_id_here
-FIREBASE_PRIVATE_KEY="your_firebase_private_key_here"
+# App Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 4. Set Up Database
+### 3. Database Setup
 
-Run the database schema in your Supabase project:
+1. Create a new Supabase project
+2. Go to SQL Editor in your Supabase dashboard
+3. Run the database schema:
 
-1. Go to your Supabase project dashboard
-2. Navigate to SQL Editor
-3. Copy and run the contents of `src/lib/schema.sql`
+```sql
+-- Copy and execute the contents of src/lib/schema.sql
+```
 
-### 5. Configure Storage
+4. Create storage bucket:
+   - Go to Storage → Create new bucket
+   - Name: `food-images`
+   - Make it public
 
-1. In Supabase Dashboard, go to Storage
-2. Create a new bucket named `food-images`
-3. Set the bucket to public
+### 4. Firebase Setup
 
-### 6. Run the Development Server
+1. Create Firebase project
+2. Enable Cloud Messaging
+3. Generate Web Push certificates
+4. Download service account JSON
+5. Extract private key and other credentials
+
+### 5. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser!
+Visit [http://localhost:3000](http://localhost:3000) 🎉
 
-## 📁 Project Structure
-
-```
-src/
-├── app/                    # Next.js 15 app router
-│   ├── api/               # API routes
-│   ├── auth/              # Authentication pages
-│   ├── browse/            # Browse food listings
-│   ├── dashboard/         # User dashboard
-│   ├── listings/          # Food listings management
-│   ├── map/               # Interactive map view
-│   ├── pickups/           # Pickup management
-│   └── profile/           # User profile
-├── components/            # Reusable React components
-├── contexts/              # React contexts
-├── hooks/                 # Custom React hooks
-└── lib/                   # Utility functions and configs
-```
-
-## 🔧 Configuration Guide
-
-### Clerk Authentication Setup
-
-1. Create a [Clerk](https://clerk.com) account
-2. Create a new application
-3. Copy your publishable and secret keys
-4. Configure sign-in/sign-up redirects
-
-### Supabase Database Setup
-
-1. Create a [Supabase](https://supabase.com) project
-2. Run the SQL schema from `src/lib/schema.sql`
-3. Enable Row Level Security (RLS)
-4. Create storage bucket for images
-
-### Firebase Push Notifications Setup
-
-1. Create a [Firebase](https://firebase.google.com) project
-2. Enable Cloud Messaging
-3. Generate Web Push certificates (VAPID)
-4. Download service account JSON
-5. Extract credentials to environment variables
-
-## 🚀 Deployment
-
-### Environment Variables for Production
-
-Make sure to set all environment variables in your hosting platform:
-
-- **Vercel**: Project Settings → Environment Variables
-- **Netlify**: Site Settings → Environment Variables
-- **Railway**: Project Settings → Variables
-
-### Build Command
+### 6. Production Build
 
 ```bash
 npm run build
+npm start
 ```
 
-### Start Command
+## 📁 Project Architecture
+
+```
+AnnMitra/
+├── 📁 src/
+│   ├── 📁 app/                     # Next.js 15 App Router
+│   │   ├── 📁 api/                # API Routes & Server Actions
+│   │   │   ├── analytics/         # Public & internal analytics
+│   │   │   ├── listings/          # Food listing CRUD
+│   │   │   ├── notifications/     # Push notification handlers
+│   │   │   ├── pickups/           # Pickup management
+│   │   │   ├── surplus/           # CSV upload & AI analysis
+│   │   │   └── users/             # User management
+│   │   ├── 📁 auth/               # Authentication pages
+│   │   ├── 📁 browse/             # Food discovery & filtering
+│   │   ├── 📁 dashboard/          # User dashboard with analytics
+│   │   ├── 📁 listings/           # Food listing management
+│   │   ├── 📁 map/                # Interactive map interface
+│   │   ├── 📁 notifications/      # Notification center
+│   │   ├── 📁 pickups/            # Pickup coordination
+│   │   ├── 📁 profile/            # User profile management
+│   │   ├── 📁 surplus/            # Partner analytics portal
+│   │   ├── layout.tsx             # Root layout with providers
+│   │   ├── page.tsx               # Landing page
+│   │   └── globals.css            # Global styles with glass morphism
+│   ├── 📁 components/             # Reusable UI Components
+│   │   ├── Header.tsx             # Navigation with glassmorphism
+│   │   ├── LocationPicker.tsx     # Map-based location selection
+│   │   ├── MapComponent.tsx       # Leaflet map integration
+│   │   ├── NotificationDropdown.tsx # Smart notification UI
+│   │   └── analytics/             # Chart components
+│   ├── 📁 contexts/               # React Context Providers
+│   │   └── NotificationContext.tsx # Global notification state
+│   ├── 📁 hooks/                  # Custom React Hooks
+│   │   ├── useNotifications.ts    # Firebase FCM integration
+│   │   ├── usePWA.ts             # PWA functionality
+│   │   └── useRealtime.ts        # Supabase realtime
+│   └── 📁 lib/                    # Core Utilities & Configuration
+│       ├── schema.sql             # Complete database schema
+│       ├── supabase.ts           # Supabase client setup
+│       ├── firebase.ts           # Firebase configuration
+│       ├── transaction-analyzer.ts # AI analysis engine
+│       └── types.ts              # TypeScript definitions
+├── 📁 public/                     # Static Assets
+│   ├── manifest.json             # PWA manifest
+│   ├── firebase-messaging-sw.js  # Service worker
+│   ├── screenshot.png            # Landing page preview
+│   └── icons/                    # PWA icons
+├── .env.example                  # Environment template
+├── package.json                  # Dependencies & scripts
+├── tailwind.config.js           # Tailwind CSS v4 config
+└── tsconfig.json                # TypeScript configuration
+```
+
+## 🎯 Core Features Deep Dive
+
+### 📊 Advanced Analytics System
+- **Public Impact Dashboard**: Real-time community statistics
+- **Partner Portal**: CSV upload for transaction history analysis
+- **AI-Powered Insights**: Smart recommendations for waste reduction
+- **Interactive Charts**: Visual data representation with Chart.js
+
+### 🔔 Smart Notification System  
+- **Real-time Push Notifications**: Firebase FCM integration
+- **In-app Notification Center**: Backdrop blur UI with smart positioning
+- **Contextual Alerts**: Pickup reminders, new listings, status updates
+- **Mobile-Optimized**: Perfect viewport positioning on all devices
+
+### 🗺️ Location Intelligence
+- **Interactive Maps**: Leaflet with custom styling
+- **Geocoding**: Reverse address lookup
+- **Location Picker**: Precise coordinate selection
+- **Distance Calculation**: Proximity-based filtering
+
+### 📱 Progressive Web App
+- **Offline Support**: Service worker caching
+- **Install Prompts**: Native app-like installation
+- **Mobile Optimization**: Touch-friendly interfaces
+- **Cross-Platform**: Works on all devices and browsers
+
+## � Deployment Guide
+
+### Vercel (Recommended)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/samarthyaveer/AnnMitra)
+
+1. **Connect Repository**: Link your GitHub repository
+2. **Configure Environment Variables**: Add all variables from `.env.example`
+3. **Deploy**: Automatic deployments on every push to main
+
+### Other Platforms
+
+#### Netlify
+```bash
+npm run build
+# Deploy dist folder
+```
+
+#### Railway
+```bash
+# Connect GitHub repository
+# Set environment variables
+# Deploy automatically
+```
+
+### Environment Variables Checklist
+
+**Required for Production:**
+- [ ] `CLERK_SECRET_KEY` & `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- [ ] `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- [ ] `SUPABASE_SERVICE_ROLE_KEY`
+- [ ] `FIREBASE_PROJECT_ID` & `FIREBASE_PRIVATE_KEY`
+- [ ] `NEXT_PUBLIC_FIREBASE_VAPID_KEY`
+- [ ] `NEXT_PUBLIC_APP_URL` (your production domain)
+
+### Performance Optimizations
+
+- ✅ **Image Optimization**: Next.js automatic optimization
+- ✅ **Code Splitting**: Automatic route-based splitting  
+- ✅ **Caching**: Service worker + API caching
+- ✅ **Bundle Analysis**: Built-in Webpack analyzer
+- ✅ **SEO**: Optimized meta tags and structured data
+
+## � Development
+
+### Available Scripts
 
 ```bash
-npm start
+npm run dev          # Development server with hot reload
+npm run build        # Production build
+npm run start        # Start production server
+npm run lint         # ESLint code checking
+npm run type-check   # TypeScript type checking
+```
+
+### Code Quality
+
+- **TypeScript**: Strict type checking enabled
+- **ESLint**: Code quality and consistency
+- **Prettier**: Automatic code formatting
+- **Husky**: Pre-commit hooks (optional)
+
+### Database Migrations
+
+The project includes a database migration system:
+
+```sql
+-- Example: migrations/001_update_status_constraint.sql
+ALTER TABLE listings 
+DROP CONSTRAINT IF EXISTS listings_status_check;
+
+ALTER TABLE listings 
+ADD CONSTRAINT listings_status_check 
+CHECK (status IN ('available', 'unavailable'));
 ```
 
 ## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+We welcome contributions! Here's how to get started:
 
-## 📝 License
+### Development Setup
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. **Fork & Clone**
+   ```bash
+   git fork https://github.com/samarthyaveer/AnnMitra.git
+   cd AnnMitra
+   ```
 
-## 🆘 Support
+2. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/amazing-feature
+   ```
 
-If you encounter any issues:
+3. **Make Changes**
+   - Follow TypeScript best practices
+   - Add tests for new features
+   - Update documentation
 
-1. Check the [GitHub Issues](../../issues) for existing solutions
-2. Create a new issue with detailed information
-3. Include error messages and steps to reproduce
+4. **Submit Pull Request**
+   ```bash
+   git commit -m "Add amazing feature"
+   git push origin feature/amazing-feature
+   ```
 
-## 🎯 Features in Development
+### Contribution Guidelines
 
-- [ ] Advanced filtering and search
-- [ ] Email notifications
-- [ ] Analytics dashboard
+- **Code Style**: Follow existing patterns and ESLint rules
+- **Commits**: Use conventional commit messages
+- **Testing**: Add tests for new functionality
+- **Documentation**: Update README and inline comments
+
+## � Roadmap
+
+### Phase 1: Core Features ✅
+- [x] Authentication system
+- [x] Food listing CRUD
+- [x] Interactive maps
+- [x] Real-time notifications
+- [x] PWA support
+
+### Phase 2: Analytics & Intelligence ✅
+- [x] Public analytics dashboard
+- [x] Partner surplus analysis
+- [x] CSV data processing
+- [x] AI-powered recommendations
+
+### Phase 3: Enhanced UX ✅
+- [x] Glass morphism design system
+- [x] Mobile-optimized UI
+- [x] Smart notification positioning
+- [x] Location intelligence
+
+### Phase 4: Future Enhancements 🚧
+- [ ] Multi-language support (i18n)
+- [ ] Advanced filtering & search
+- [ ] Email notification fallbacks
 - [ ] Mobile app (React Native)
-- [ ] Multi-language support
+- [ ] Integration with campus meal plans
+- [ ] Carbon footprint tracking
+
+## 💡 Use Cases
+
+### For Students
+- **Discover surplus food** from campus canteens at discounted prices
+- **Share extra food** from meal plans or events
+- **Connect with peers** through food sharing
+- **Track environmental impact** of waste reduction
+
+### For Campus Partners (Canteens)
+- **Analyze food waste patterns** with CSV upload
+- **Get AI-powered recommendations** for waste reduction
+- **Reach students directly** with surplus notifications
+- **Track operational efficiency** with analytics
+
+### For NGOs
+- **Access surplus food** for community programs
+- **Coordinate pickups** with automated notifications
+- **Scale impact** through campus partnerships
+- **Monitor food rescue metrics**
+
+## 🆘 Troubleshooting
+
+### Common Issues
+
+**Build Errors:**
+```bash
+# Clear cache and reinstall
+rm -rf .next node_modules package-lock.json
+npm install
+npm run build
+```
+
+**Environment Variables:**
+- Ensure all required variables are set
+- Check for typos in variable names
+- Verify API keys are active
+
+**Database Connectivity:**
+- Confirm Supabase project is active
+- Check RLS policies are enabled
+- Verify service role key permissions
+
+**Push Notifications:**
+- Ensure VAPID keys are correctly configured
+- Check Firebase project settings
+- Verify service worker registration
+
+### Getting Help
+
+1. 📚 **Check Documentation**: Review this README thoroughly
+2. 🔍 **Search Issues**: Look through [GitHub Issues](../../issues)
+3. 🆕 **Create Issue**: Report bugs with reproduction steps
+4. 💬 **Community**: Join our discussions
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+
+### Third-Party Licenses
+- Next.js: MIT License
+- React: MIT License  
+- Tailwind CSS: MIT License
+- Leaflet: BSD 2-Clause License
+- Chart.js: MIT License
+
+## 🙏 Acknowledgments
+
+- **Next.js Team** for the incredible framework
+- **Supabase** for the backend-as-a-service platform  
+- **Clerk** for seamless authentication
+- **Firebase** for reliable push notifications
+- **Leaflet** for powerful mapping capabilities
+- **Tailwind CSS** for the utility-first styling approach
 
 ---
 
-Made with ❤️ for campus communities worldwide.
+<div align="center">
+
+**Made with ❤️ for sustainable campus communities**
+
+[🌐 Website](https://annmitra.vercel.app) • [📧 Contact](mailto:contact@annmitra.app) • [🐛 Report Bug](../../issues) • [💡 Request Feature](../../issues)
+
+</div>
