@@ -46,12 +46,12 @@ export default function Header() {
               willChange: 'backdrop-filter'
             }}
           >
-            <div className="px-6 py-4">
-              <div className="flex justify-between items-center">
+            <div className="px-4 py-4 sm:px-6">
+              <div className="flex justify-between items-center gap-3 min-w-0">
                 {/* Logo */}
-                <div className="flex items-center space-x-3">
-                  <div className="logo-icon">A</div>
-                  <Link href="/" className="logo-text">
+                <div className="flex items-center gap-3 flex-shrink-0 min-w-0">
+                  <div className="logo-icon flex-shrink-0">A</div>
+                  <Link href="/" className="logo-text flex-shrink-0 truncate">
                     AnnMitra
                   </Link>
                 </div>
@@ -74,10 +74,10 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Menu Button */}
-                <div className="md:hidden flex items-center space-x-2">
+                <div className="md:hidden flex items-center gap-2 flex-shrink-0 mobile-actions">
                   <button
                     onClick={toggleMobileMenu}
-                    className="mobile-menu-toggle"
+                    className="mobile-menu-toggle flex-shrink-0 w-10 h-10 p-2 rounded-xl glass transition-all duration-300 hover:bg-white/10"
                     aria-label="Toggle mobile menu"
                   >
                     {isMobileMenuOpen ? (
@@ -139,12 +139,12 @@ export default function Header() {
             willChange: 'backdrop-filter'
           }}
         >
-          <div className="px-6 py-4">
-            <div className="flex justify-between items-center">
+          <div className="px-4 py-4 sm:px-6">
+            <div className="flex justify-between items-center gap-3 min-w-0">
               {/* Logo */}
-              <div className="flex items-center space-x-3">
-                <div className="logo-icon">A</div>
-                <Link href="/" className="logo-text">
+              <div className="flex items-center gap-3 flex-shrink-0 min-w-0">
+                <div className="logo-icon flex-shrink-0">A</div>
+                <Link href="/" className="logo-text flex-shrink-0 truncate">
                   AnnMitra
                 </Link>
               </div>
@@ -185,23 +185,27 @@ export default function Header() {
               </div>
 
               {/* Mobile Menu Button */}
-              <div className="md:hidden flex items-center space-x-3">
-                <NotificationDropdown />
-                <UserButton 
-                  appearance={{
-                    elements: {
-                      avatarBox: "w-8 h-8 ring-2 ring-green-400/30",
-                      userButtonPopoverCard: "glass border-gray-600 bg-gray-900/90 backdrop-blur-xl",
-                      userButtonPopoverActionButton: "text-white hover:bg-gray-700/50",
-                      userButtonPopoverActionButtonText: "text-white",
-                      userButtonPopoverFooter: "bg-gray-800/50 border-t border-gray-600",
-                    }
-                  }}
-                />
+              <div className="md:hidden flex items-center gap-2 flex-shrink-0 mobile-actions">
+                <div className="flex-shrink-0">
+                  <NotificationDropdown />
+                </div>
+                <div className="flex-shrink-0">
+                  <UserButton 
+                    appearance={{
+                      elements: {
+                        avatarBox: "w-8 h-8 ring-2 ring-green-400/30",
+                        userButtonPopoverCard: "glass border-gray-600 bg-gray-900/90 backdrop-blur-xl",
+                        userButtonPopoverActionButton: "text-white hover:bg-gray-700/50",
+                        userButtonPopoverActionButtonText: "text-white",
+                        userButtonPopoverFooter: "bg-gray-800/50 border-t border-gray-600",
+                      }
+                    }}
+                  />
+                </div>
                 
                 <button
                   onClick={toggleMobileMenu}
-                  className="mobile-menu-toggle"
+                  className="mobile-menu-toggle flex-shrink-0 w-10 h-10 p-2 rounded-xl glass transition-all duration-300 hover:bg-white/10"
                   aria-label="Toggle mobile menu"
                 >
                   {isMobileMenuOpen ? (

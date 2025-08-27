@@ -372,14 +372,125 @@ html {
   }
 }
 
-/* Mobile notification dropdown positioning fix */
-@media (max-width: 640px) {
+/* Enhanced notification dropdown styles with stronger backdrop */
+.notification-dropdown {
+  backdrop-filter: blur(40px) saturate(200%) contrast(120%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) contrast(120%) !important;
+  background: rgba(0, 0, 0, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 16px !important;
+  transform: translateZ(0) !important;
+  will-change: backdrop-filter !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  
+  /* Base dimensions - JavaScript will handle positioning */
+  width: 320px !important;
+  max-height: 400px !important;
+  overflow: hidden !important;
+}
+
+/* Responsive width adjustments */
+@media (max-width: 768px) {
   .notification-dropdown {
-    right: 0 !important;
-    left: auto !important;
-    margin-right: 0 !important;
-    width: 85vw !important;
-    max-width: 320px !important;
+    width: min(300px, calc(100vw - 16px)) !important;
+    max-height: min(350px, calc(100vh - 100px)) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-dropdown {
+    width: min(280px, calc(100vw - 8px)) !important;
+    max-height: min(300px, calc(100vh - 80px)) !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .notification-dropdown {
+    width: calc(100vw - 4px) !important;
+    max-height: min(280px, calc(100vh - 70px)) !important;
+  }
+}
+
+/* Mobile navbar element positioning fixes */
+@media (max-width: 768px) {
+  /* Fix header content on mobile */
+  header .px-4 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+  
+  header .sm\:px-6 {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  
+  /* Mobile user actions container */
+  .mobile-actions {
+    gap: 6px !important;
+    flex-shrink: 0 !important;
+    align-items: center !important;
+    overflow: visible !important;
+  }
+  
+  /* Hamburger menu button positioning */
+  .mobile-menu-toggle {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 8px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* UserButton on mobile */
+  .mobile-actions .cl-userButtonBox {
+    width: 32px !important;
+    height: 32px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Notification button on mobile */
+  .mobile-actions button[aria-label*="notification"] {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 8px !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Ensure UserButton doesn't overflow */
+  .cl-userButtonBox {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+  }
+  
+  /* Mobile navigation responsive adjustments */
+  header {
+    width: 95% !important;
+    max-width: 500px !important;
+    padding: 8px 12px !important;
+    min-height: 56px !important;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  header {
+    width: 98% !important;
+    max-width: 100% !important;
+    padding: 6px 8px !important;
+    min-height: 52px !important;
+  }
+  
+  header .px-4 {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+  
+  .logo-text {
+    font-size: 18px !important;
+  }
+  
+  .mobile-actions {
+    gap: 4px !important;
   }
 }
 

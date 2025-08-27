@@ -53,6 +53,7 @@ const formatTimeAgo = (date: Date) => {
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const {
     notifications,
     unreadCount,
@@ -60,6 +61,53 @@ export default function NotificationDropdown() {
     markAllAsRead,
     clearAll
   } = useNotificationContext()
+
+  // Position dropdown relative to button and viewport
+  useEffect(() => {
+    if (isOpen && dropdownRef.current && buttonRef.current) {
+      const dropdown = dropdownRef.current
+      const button = buttonRef.current
+      const buttonRect = button.getBoundingClientRect()
+      const viewportWidth = window.innerWidth
+      const viewportHeight = window.innerHeight
+      
+      // Reset position styles to get natural dimensions
+      dropdown.style.position = 'fixed'
+      dropdown.style.visibility = 'hidden'
+      dropdown.style.display = 'block'
+      
+      const dropdownRect = dropdown.getBoundingClientRect()
+      
+      // Calculate optimal position
+      let left = buttonRect.right - dropdownRect.width
+      let top = buttonRect.bottom + 8
+      
+      // Ensure dropdown doesn't go off screen horizontally
+      if (left < 8) {
+        left = 8
+      } else if (left + dropdownRect.width > viewportWidth - 8) {
+        left = viewportWidth - dropdownRect.width - 8
+      }
+      
+      // Ensure dropdown doesn't go off screen vertically
+      if (top + dropdownRect.height > viewportHeight - 16) {
+        // Position above button if not enough space below
+        top = buttonRect.top - dropdownRect.height - 8
+        
+        // If still not enough space, adjust height and position at top
+        if (top < 16) {
+          top = 16
+          dropdown.style.maxHeight = `${viewportHeight - 32}px`
+        }
+      }
+      
+      // Apply calculated position
+      dropdown.style.left = `${left}px`
+      dropdown.style.top = `${top}px`
+      dropdown.style.right = 'auto'
+      dropdown.style.visibility = 'visible'
+    }
+  }, [isOpen])
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -93,6 +141,7 @@ export default function NotificationDropdown() {
     <div className="relative" ref={dropdownRef}>
       {/* Notification Bell Button */}
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-3 text-gray-400 hover:text-green-400 hover:bg-white/5 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2 focus:ring-offset-transparent rounded-xl border border-gray-600/30 glass"
         aria-label="Notifications"
@@ -122,15 +171,12 @@ export default function NotificationDropdown() {
       {/* Dropdown Menu */}
       {isOpen && (
         <div 
-          className="notification-dropdown absolute right-0 mt-2 w-80 glass-nav backdrop-blur-strong border border-gray-600 shadow-xl z-50 max-h-96 overflow-hidden"
+          ref={dropdownRef}
+          className="notification-dropdown"
           style={{
-            backdropFilter: 'blur(35px) saturate(180%)',
-            WebkitBackdropFilter: 'blur(35px) saturate(180%)',
-            background: 'rgba(255, 255, 255, 0.08)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            borderRadius: '20px',
-            transform: 'translateZ(0)',
-            willChange: 'backdrop-filter'
+            position: 'fixed',
+            zIndex: 9999,
+            visibility: 'hidden'
           }}
         >
           {/* Header */}
