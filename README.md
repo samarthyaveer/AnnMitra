@@ -4,7 +4,7 @@
 
 AnnMitra is a modern, full-stack web application that connects surplus food from campus canteens with students and NGOs. Built with Next.js 15, it transforms food waste into community meals while creating positive environmental impact.
 
-![AnnMitra Landing Page](./public/screenshot.png)
+![AnnMitra Landing Page](./public/Screenshot.png)
 
 ## ✨ Key Features
 
